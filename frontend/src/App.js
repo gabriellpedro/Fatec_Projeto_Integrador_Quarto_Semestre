@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import React from 'react';
+import CitiesStatistics from './pages/CitiesStatistics';
 
 class App extends React.Component {
   render(){
@@ -17,6 +18,7 @@ class App extends React.Component {
             <Route path="/" exact element={<Home/>} />
             <Route path="/reciclestatistics" exact element={<RecycleStatistics />} />
             <Route path="/getmaterials" exact element={<RecycleMaterials />} />
+            <Route path="/state/:state" exact element={<CitiesStatistics/>} />
           </Routes>
           <Footer />
         </Router>
