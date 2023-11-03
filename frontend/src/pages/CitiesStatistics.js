@@ -31,12 +31,12 @@ class CitiesStatistics extends React.Component {
           <h1>City Statistics</h1>
           <p>City Name: {cityData.cityName}</p>
           <p>Population: {cityData.population}</p>
-          {/* Renderize outras informações da cidade aqui */}
+          {/* need to render the properties here */}
         </div>
       );
     }
 
-    return <p>Loading city data...</p>;
+    return <p>Carregando informações das cidades...</p>;
   }
 
   render() {
