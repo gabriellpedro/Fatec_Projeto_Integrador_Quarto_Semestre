@@ -1,5 +1,6 @@
 import StateOccurrence from '../components/StateOccurrence'
 import "../styles/RecycleStatistics.css";
+import {Link} from 'react-router-dom';
 import React from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
@@ -27,6 +28,7 @@ class RecycleStatistics extends React.Component {
             {this.state.details.map((stateOccurrence, key) => (
               <Link to={`/reciclestatistics/${stateOccurrence.state}`} key={key} style={{ textDecoration: 'none', cursor: 'pointer', color: 'black' }}>
                 <StateOccurrence
+                  image={stateOccurrence.state_img}
                   state={stateOccurrence.state}
                   paper={stateOccurrence.paper}
                   steel={stateOccurrence.steel}
