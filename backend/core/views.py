@@ -15,6 +15,47 @@ class RecicleMaterialsStatisticsView(APIView):
         statistics on recicled material from 
         all the states from brasil
     """
+
+
+    def get(self, request):
+        recicle_atlas = RecicleAtlas()
+        recicle_atlas.extract_information_about_recicles()
+        recicle_atlas.treat_data_state()
+        temp_list = list()
+        for state in recicle_atlas.by_state.keys():
+            possible_state = recicle_atlas.by_state[state]
+            possible_state['state'] = state
+            temp_list.append(possible_state)
+        recicle_atlas.all_materials = temp_list
+        return Response(recicle_atlas.all_materials)
+
+class RecicleMaterialsStatisticsViewByState(APIView):
+    """
+        View used to extract information about 
+        statistics on recicled material from 
+        all the states from brasil
+    """
+
+
+    def get(self, request, state: str or None):
+        recicle_atlas = RecicleAtlas()
+        recicle_atlas.extract_information_about_recicles()
+        recicle_atlas.treat_data_state()
+        occurrence_by_state = dict()
+        for city in recicle_atlas.by_city.keys():
+            recicle_atlas.by_city[city]['city'] = city
+            try:
+                occurrence_by_state[recicle_atlas.by_city[city].get('state', str())].append(recicle_atlas.by_city[city])
+            except KeyError:
+                occurrence_by_state[recicle_atlas.by_city[city].get('state', str())] = [recicle_atlas.by_city[city]]
+        return Response(occurrence_by_state[state])
+
+class RecicleMaterialsSByState(APIView):
+    """
+        View used to extract information about 
+        statistics on recicled material from 
+        all the states from brasil
+    """
     def get(self, request):
         object_ = RecicleAtlas()
         object_.extract_information_about_recicles()
@@ -26,7 +67,6 @@ class RecicleMaterialsStatisticsView(APIView):
             temp_list.append(possible_state)
         object_.all_materials = temp_list
         return Response(object_.all_materials)
-
 
 class RecicleMaterialsView(APIView):
     """
