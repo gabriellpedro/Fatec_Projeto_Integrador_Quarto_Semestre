@@ -2,6 +2,7 @@ from django.http import JsonResponse
 import requests
 from recicle_apis_consume.libs.litorallimpo_class import LitoralLimpoAPI
 from recicle_apis_consume.recicle_atlas.libs.recicle_atlas_class import RecicleAtlas
+from country_apis_consume.libs.states_information_class import StateInformation
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,19 +16,22 @@ class RecicleMaterialsStatisticsView(APIView):
         statistics on recicled material from 
         all the states from brasil
     """
-
-
     def get(self, request):
-        recicle_atlas = RecicleAtlas()
-        recicle_atlas.extract_information_about_recicles()
-        recicle_atlas.treat_data_state()
+        object_ = RecicleAtlas()
+        state_information = StateInformation()
+        state_information.extract_states()
+        object_.extract_information_about_recicles()
+        object_.treat_data_state()
         temp_list = list()
-        for state in recicle_atlas.by_state.keys():
-            possible_state = recicle_atlas.by_state[state]
+        for state in object_.by_state.keys():
+            possible_state = object_.by_state[state]
             possible_state['state'] = state
             temp_list.append(possible_state)
-        recicle_atlas.all_materials = temp_list
-        return Response(recicle_atlas.all_materials)
+        object_.all_materials = temp_list
+        for state in object_.all_materials:
+            state_occurrence = state_information.by_state[state['state']]
+            state.update(state_occurrence)
+        return Response(object_.all_materials)
 
 class RecicleMaterialsStatisticsViewByState(APIView):
     """
@@ -35,8 +39,6 @@ class RecicleMaterialsStatisticsViewByState(APIView):
         statistics on recicled material from 
         all the states from brasil
     """
-
-
     def get(self, request, state: str or None):
         recicle_atlas = RecicleAtlas()
         recicle_atlas.extract_information_about_recicles()
@@ -50,23 +52,28 @@ class RecicleMaterialsStatisticsViewByState(APIView):
                 occurrence_by_state[recicle_atlas.by_city[city].get('state', str())] = [recicle_atlas.by_city[city]]
         return Response(occurrence_by_state[state])
 
-class RecicleMaterialsSByState(APIView):
-    """
-        View used to extract information about 
-        statistics on recicled material from 
-        all the states from brasil
-    """
-    def get(self, request):
-        object_ = RecicleAtlas()
-        object_.extract_information_about_recicles()
-        object_.treat_data_state()
-        temp_list = list()
-        for state in object_.by_state.keys():
-            possible_state = object_.by_state[state]
-            possible_state['state'] = state
-            temp_list.append(possible_state)
-        object_.all_materials = temp_list
-        return Response(object_.all_materials)
+# class RecicleMaterialsSByState(APIView):
+#     """
+#         View used to extract information about 
+#         statistics on recicled material from 
+#         all the states from brasil
+#     """
+#     def get(self, request):
+#         object_ = RecicleAtlas()
+#         state_information = StateInformation()
+#         state_information.extract_states()
+#         object_.extract_information_about_recicles()
+#         object_.treat_data_state()
+#         temp_list = list()
+#         for state in object_.by_state.keys():
+#             possible_state = object_.by_state[state]
+#             possible_state['state'] = state
+#             temp_list.append(possible_state)
+#         object_.all_materials = temp_list
+#         for state in object_.all_materials:
+#             state_occurrence = state[state_occurrence['state']]
+#             state.update(state_occurrence)
+#         return Response(object_.all_materials)
 
 class RecicleMaterialsView(APIView):
     """
