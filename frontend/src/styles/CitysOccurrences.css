@@ -7,7 +7,7 @@
     flex-direction: column;
   }
   .citys .citysTitle {
-    font-family: cursive;
+    font-family: Arial, Helvetica, sans-serif !important;
     font-size: 60px;
   }
   
