@@ -16,9 +16,9 @@ class App extends React.Component {
           <Navbar />
           <Routes>
             <Route path="/" exact element={<Home/>} />
-            <Route path="/reciclestatistics" exact element={<RecycleStatistics />} />
             <Route path="/getmaterials" exact element={<RecycleMaterials />} />
-            <Route path="/state/:state" exact element={<CitiesStatistics/>} />
+            <Route path="/reciclestatistics" exact element={<RecycleStatistics />} />
+            <Route path="/reciclestatistics/:state" exact element={<CitiesStatistics/>} />
           </Routes>
           <Footer />
         </Router>
