@@ -1,13 +1,20 @@
-from django.http import JsonResponse
-import requests
-from recicle_apis_consume.libs.litorallimpo_class import LitoralLimpoAPI
 from recicle_apis_consume.recicle_atlas.libs.recicle_atlas_class import RecicleAtlas
 from country_apis_consume.libs.states_information_class import StateInformation
+from recicle_apis_consume.libs.litorallimpo_class import LitoralLimpoAPI
 from django.shortcuts import render, redirect, HttpResponseRedirect
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from django.contrib.auth.models import auth
 from rest_framework.views import APIView
-import pandas as pd
+from django.http import JsonResponse
+from core.forms import UserForm
 import plotly.express as px
+from .models import User
+import pandas as pd
+import requests
+from django.db.models.signals import post_save
+from Eco.settings import AUTH_USER_MODEL
+from django.dispatch import receiver
 
 
 class RecicleMaterialsStatisticsView(APIView):
@@ -110,4 +117,73 @@ class RecicleMaterialsGraphView(APIView):
                 graph = graph.to_json()
 
                 return JsonResponse(graph)
-            
+
+
+class RegisterUser(APIView):
+    """
+        Class used to register users and
+        performe login. 
+    """
+
+    def get(self, request, format=None):
+        """
+        Return a list of all users.
+        """
+        usernames = [user.username for user in User.objects.all()]
+        return Response(usernames)
+
+    def post(self, request, format=None):
+        post_data = request.POST.copy()
+        user_form = UserForm(post_data)
+        if user_form.is_valid():
+            context = {'user_form': user_form}
+            if user_form.clean_password() == user_form.clean_confirm_password():
+                if User.objects.filter(email=user_form.clean_email()).exists():
+                    return Response({'errors': 'Email não disponível'})
+                else:
+                    user_form.cleaned_data.pop('confirm_password')
+                    user_registration = User.objects.create_user(**user_form.cleaned_data)
+                    user_registration.save()
+                    return Response([{'errors': 'None'}])
+            else:
+                return Response([{'errors': 'Senhas não coincidem'}])
+        else:
+            return Response([{'errors': user_form.errors}])
+
+
+class LoginUser(APIView):
+    """
+        Class used to register users and
+        performe login. 
+    """
+
+    def get(self, request, format=None):
+        """
+        Return a list of all users.
+        """
+        usernames = [user.username for user in User.objects.all()]
+        return Response([usernames])
+
+    # @receiver(post_save, sender=AUTH_USER_MODEL)
+    def post(self, request, format=None):
+        email = request.POST['email']
+        password = request.POST['password']
+        user = auth.authenticate(email=email, password=password)
+        print(user)
+        if user is not None:
+            auth.login(request, user)
+            print(request.user)
+            return Response([{'isLogged': True}])
+            # return Response([{'token': Token.objects.get_or_create(user=user)}])
+            # serializer = self.serializer_class(data=request.data,
+            #                                    context={'request': request})
+            # serializer.is_valid(raise_exception=True)
+            # user = serializer.validated_data['user']
+            # token, created = Token.objects.get_or_create(user=user)
+            # return Response({
+            #     'token': token.key,
+            #     'user_id': user.pk,
+            #     'email': user.email
+            # })
+        else:
+            return Response([{'errors': 'Senha ou usuários inválido'}])
