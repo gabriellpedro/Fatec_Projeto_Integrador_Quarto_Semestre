@@ -2,6 +2,7 @@ from recicle_apis_consume.recicle_atlas.libs.recicle_atlas_class import RecicleA
 from country_apis_consume.libs.states_information_class import StateInformation
 from recicle_apis_consume.libs.litorallimpo_class import LitoralLimpoAPI
 from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from django.contrib.auth.models import auth
@@ -12,9 +13,10 @@ import plotly.express as px
 from .models import User
 import pandas as pd
 import requests
-from django.db.models.signals import post_save
-from Eco.settings import AUTH_USER_MODEL
-from django.dispatch import receiver
+from django.contrib.auth.decorators import login_required
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 
 class RecicleMaterialsStatisticsView(APIView):
@@ -23,6 +25,9 @@ class RecicleMaterialsStatisticsView(APIView):
         statistics on recicled material from 
         all the states from brasil
     """
+    # authentication_classes = [SessionAuthentication, TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+
     def get(self, request):
         object_ = RecicleAtlas()
         state_information = StateInformation()
@@ -150,11 +155,9 @@ class RegisterUser(APIView):
         else:
             return Response([{'errors': user_form.errors}])
 
-
-class LoginUser(APIView):
+class AuthLoginView(APIView):
     """
-        Class used to register users and
-        performe login. 
+    Class used to perform user login and obtain authentication token.
     """
 
     def get(self, request, format=None):
@@ -164,26 +167,18 @@ class LoginUser(APIView):
         usernames = [user.username for user in User.objects.all()]
         return Response([usernames])
 
-    # @receiver(post_save, sender=AUTH_USER_MODEL)
     def post(self, request, format=None):
-        email = request.POST['email']
-        password = request.POST['password']
-        user = auth.authenticate(email=email, password=password)
-        print(user)
+        email = request.data.get('email')
+        password = request.data.get('password')
+        user = auth.authenticate(request, email=email, password=password)
+
         if user is not None:
             auth.login(request, user)
-            print(request.user)
-            return Response([{'isLogged': True}])
-            # return Response([{'token': Token.objects.get_or_create(user=user)}])
-            # serializer = self.serializer_class(data=request.data,
-            #                                    context={'request': request})
-            # serializer.is_valid(raise_exception=True)
-            # user = serializer.validated_data['user']
-            # token, created = Token.objects.get_or_create(user=user)
-            # return Response({
-            #     'token': token.key,
-            #     'user_id': user.pk,
-            #     'email': user.email
-            # })
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({'isLogged': True, 'token': token.key})
         else:
-            return Response([{'errors': 'Senha ou usuários inválido'}])
+            return Response({'errors': 'Senha ou usuários inválido'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    def put(self, request, format=None):
+        auth.logout(request)
+        return Response({'isLogged': False})
