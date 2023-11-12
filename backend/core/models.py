@@ -31,7 +31,6 @@ class UserManager(BaseUserManager):
         
         return self.create_user(email, password, **extra_fields)
 
-
 class User(AbstractBaseUser):
     email = models.EmailField(unique=True, max_length=254)
     password = models.CharField(max_length=128)
@@ -55,10 +54,17 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return self.is_staff
 
-
 class RecycleBalance(models.Model):
     date_balance = models.DateTimeField(auto_now_add=True)
-    user_id = models.IntegerField(unique=True)
-    material_id = models.IntegerField(unique=True)
-    mesure_unit = models.IntegerField(unique=True)
+    user_id = models.IntegerField()
+    material_id = models.IntegerField()
+    mesure_unit = models.IntegerField()
+    is_active = models.BooleanField(default=True)
+
+class MaterialsToRecycle(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now_add=True)
+    price = models.FloatField()
+    name = models.CharField(max_length=150)
+    mesure_unity = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)

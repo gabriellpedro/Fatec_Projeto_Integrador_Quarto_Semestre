@@ -123,7 +123,6 @@ class RecicleMaterialsGraphView(APIView):
 
                 return JsonResponse(graph)
 
-
 class RegisterUser(APIView):
     """
         Class used to register users and
@@ -179,6 +178,12 @@ class AuthLoginView(APIView):
         else:
             return Response({'errors': 'Senha ou usuários inválido'}, status=status.HTTP_401_UNAUTHORIZED)
 
-    def put(self, request, format=None):
+
+class AuthLogoutView(APIView):
+    """
+    Class used to perform user logout.
+    """
+
+    def post(self, request, format=None):
         auth.logout(request)
         return Response({'isLogged': False})
