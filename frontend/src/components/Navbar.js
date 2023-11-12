@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Logo from '../assets/logo.png';
-import SplitButton from '../components/SplitButton';
 import {Link} from 'react-router-dom';
 // import HomeIcon from '@mui/icons-material/Home';
 import ReorderIcon from '@mui/icons-material/Reorder';
@@ -22,15 +21,16 @@ function Navbar() {
                 </Link>
                 <div className='hiddenLinks'>
                     <Link to={"/"}> Home </Link>
+                    <Link to={"/login"}>Login</Link>
                     <Link to={"/menu"}> Menu </Link>
                     <Link to={"/sobrenos"}> Sobre nós </Link>
                     <Link to={"/ecoins"}> E-coins </Link>
                     <Link to={"/reciclestatistics"}> Reciclagem </Link>
-                    <SplitButton />
                 </div>
             </div>
             <div className='rightSide'>
                 <Link to={"/"}> Home </Link>
+                <Link to={"/login"}>Login</Link>
                 <Link to={"/menu"}> Menu </Link>
                 <Link to={"/sobrenos"}> Sobre nós </Link>
                 <Link to={"/ecoins"}> E-coins </Link>
@@ -38,7 +38,6 @@ function Navbar() {
                 <button onClick={toggleNavbar}>
                     <ReorderIcon />
                 </button>
-                <SplitButton />
             </div>
                 
         </div>
