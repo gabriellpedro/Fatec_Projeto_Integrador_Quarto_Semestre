@@ -1,9 +1,13 @@
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from recicle_apis_consume.recicle_atlas.libs.recicle_atlas_class import RecicleAtlas
 from country_apis_consume.libs.states_information_class import StateInformation
 from recicle_apis_consume.libs.litorallimpo_class import LitoralLimpoAPI
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.views.decorators.csrf import ensure_csrf_cookie
+from rest_framework.permissions import IsAuthenticated
+from core.storage.materials_class import Materials
 from rest_framework.authtoken.models import Token
+from core.storage.user_class import UserStorage
 from rest_framework.response import Response
 from django.contrib.auth.models import auth
 from rest_framework.views import APIView
@@ -14,9 +18,9 @@ from .models import User
 import pandas as pd
 import requests
 from django.contrib.auth.decorators import login_required
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
-from core.storage.materials_class import Materials
+
+
+
 
 
 
@@ -64,29 +68,6 @@ class RecicleMaterialsStatisticsViewByState(APIView):
             except KeyError:
                 occurrence_by_state[recicle_atlas.by_city[city].get('state', str())] = [recicle_atlas.by_city[city]]
         return Response(occurrence_by_state[state])
-
-# class RecicleMaterialsSByState(APIView):
-#     """
-#         View used to extract information about 
-#         statistics on recicled material from 
-#         all the states from brasil
-#     """
-#     def get(self, request):
-#         object_ = RecicleAtlas()
-#         state_information = StateInformation()
-#         state_information.extract_states()
-#         object_.extract_information_about_recicles()
-#         object_.treat_data_state()
-#         temp_list = list()
-#         for state in object_.by_state.keys():
-#             possible_state = object_.by_state[state]
-#             possible_state['state'] = state
-#             temp_list.append(possible_state)
-#         object_.all_materials = temp_list
-#         for state in object_.all_materials:
-#             state_occurrence = state[state_occurrence['state']]
-#             state.update(state_occurrence)
-#         return Response(object_.all_materials)
 
 class RecicleMaterialsView(APIView):
     """
@@ -187,3 +168,21 @@ class AuthLogoutView(APIView):
     def post(self, request, format=None):
         auth.logout(request)
         return Response({'isLogged': False})
+
+
+class UserSearch(APIView):
+    """
+        Class used to search by
+        User using the storage
+    """
+    def get(self, request):
+        email = request.GET.get('email')
+        if email:
+            object_ = UserStorage(email)
+            possible_user = object_.get_by_email()
+            if possible_user:
+                return Response([possible_user])
+            else:
+                return Response([{'errors': 'Usuário não encontrado'}])
+        else:
+            return Response([{'errors': 'Necessário enviar um email válido'}])
