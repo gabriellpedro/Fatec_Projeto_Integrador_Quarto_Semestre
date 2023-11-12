@@ -31,7 +31,6 @@ class UserManager(BaseUserManager):
         
         return self.create_user(email, password, **extra_fields)
 
-
 class User(AbstractBaseUser):
     email = models.EmailField(unique=True, max_length=254)
     password = models.CharField(max_length=128)
@@ -55,10 +54,62 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return self.is_staff
 
-
 class RecycleBalance(models.Model):
+    """
+        Class used to save each occurrence
+        from the balance that are going to be made
+        while the operator is adding products to the list.
+
+        After the confirmation off the operator
+        all the products that are current in the list, are going to
+        receive the status is_active = True and is going to be
+        added to the client OperationsBalance as a positive operation
+    """
     date_balance = models.DateTimeField(auto_now_add=True)
-    user_id = models.IntegerField(unique=True)
-    material_id = models.IntegerField(unique=True)
-    mesure_unit = models.IntegerField(unique=True)
+    user_id = models.IntegerField()
+    material_id = models.IntegerField()
+    mesure = models.FloatField()
     is_active = models.BooleanField(default=True)
+
+class MaterialsToRecycle(models.Model):
+    """
+        Class used to save all materials
+        occurrence, from the actives and the
+        ones that are not longer in use
+    """
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now_add=True)
+    price = models.FloatField()
+    name = models.CharField(max_length=150)
+    mesure_unity = models.CharField(max_length=50)
+    is_active = models.BooleanField(default=True)
+
+class MaterialsToRecycleOccurrence(models.Model):
+    """
+        Class used to save all materials
+        occurrence, from the actives and the
+        ones that are not longer in use
+
+        One Occurrence
+    """
+    material_id = models.IntegerField()
+    name = models.CharField(max_length=150)
+
+    class Meta:
+        abstract = True
+        
+    def __str__(self):
+        return self.name
+
+class OperationsBalance(models.Model):
+    """
+        Class used to save all users
+        changes on his final account number
+
+        ArrayField(ids) => from RecycleBalance
+    """
+    created_at = models.DateTimeField(auto_now_add=True)
+    user_id = models.IntegerField()
+    total = models.FloatField()
+    operation_type = models.IntegerField()
+    balance_ids = models.ArrayField(model_container=MaterialsToRecycleOccurrence)

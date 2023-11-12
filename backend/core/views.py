@@ -1,8 +1,13 @@
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from recicle_apis_consume.recicle_atlas.libs.recicle_atlas_class import RecicleAtlas
 from country_apis_consume.libs.states_information_class import StateInformation
 from recicle_apis_consume.libs.litorallimpo_class import LitoralLimpoAPI
 from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.views.decorators.csrf import ensure_csrf_cookie
+from rest_framework.permissions import IsAuthenticated
+from core.storage.materials_class import Materials
 from rest_framework.authtoken.models import Token
+from core.storage.user_class import UserStorage
 from rest_framework.response import Response
 from django.contrib.auth.models import auth
 from rest_framework.views import APIView
@@ -12,9 +17,11 @@ import plotly.express as px
 from .models import User
 import pandas as pd
 import requests
-from django.db.models.signals import post_save
-from Eco.settings import AUTH_USER_MODEL
-from django.dispatch import receiver
+from django.contrib.auth.decorators import login_required
+
+
+
+
 
 
 class RecicleMaterialsStatisticsView(APIView):
@@ -23,6 +30,9 @@ class RecicleMaterialsStatisticsView(APIView):
         statistics on recicled material from 
         all the states from brasil
     """
+    # authentication_classes = [SessionAuthentication, TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
+
     def get(self, request):
         object_ = RecicleAtlas()
         state_information = StateInformation()
@@ -59,38 +69,14 @@ class RecicleMaterialsStatisticsViewByState(APIView):
                 occurrence_by_state[recicle_atlas.by_city[city].get('state', str())] = [recicle_atlas.by_city[city]]
         return Response(occurrence_by_state[state])
 
-# class RecicleMaterialsSByState(APIView):
-#     """
-#         View used to extract information about 
-#         statistics on recicled material from 
-#         all the states from brasil
-#     """
-#     def get(self, request):
-#         object_ = RecicleAtlas()
-#         state_information = StateInformation()
-#         state_information.extract_states()
-#         object_.extract_information_about_recicles()
-#         object_.treat_data_state()
-#         temp_list = list()
-#         for state in object_.by_state.keys():
-#             possible_state = object_.by_state[state]
-#             possible_state['state'] = state
-#             temp_list.append(possible_state)
-#         object_.all_materials = temp_list
-#         for state in object_.all_materials:
-#             state_occurrence = state[state_occurrence['state']]
-#             state.update(state_occurrence)
-#         return Response(object_.all_materials)
-
 class RecicleMaterialsView(APIView):
     """
         View used to extract information about 
         mesure unit and prices from recile materials
     """
     def get(self, request):
-        object_ = LitoralLimpoAPI()
-        object_.extract_materials()
-        return Response(object_.all_materials)
+        object_ = Materials()
+        return Response(object_.run())
     
 class RecicleMaterialsGraphView(APIView):
     '''
@@ -117,7 +103,6 @@ class RecicleMaterialsGraphView(APIView):
                 graph = graph.to_json()
 
                 return JsonResponse(graph)
-
 
 class RegisterUser(APIView):
     """
@@ -150,11 +135,9 @@ class RegisterUser(APIView):
         else:
             return Response([{'errors': user_form.errors}])
 
-
-class LoginUser(APIView):
+class AuthLoginView(APIView):
     """
-        Class used to register users and
-        performe login. 
+    Class used to perform user login and obtain authentication token.
     """
 
     def get(self, request, format=None):
@@ -164,26 +147,42 @@ class LoginUser(APIView):
         usernames = [user.username for user in User.objects.all()]
         return Response([usernames])
 
-    # @receiver(post_save, sender=AUTH_USER_MODEL)
     def post(self, request, format=None):
-        email = request.POST['email']
-        password = request.POST['password']
-        user = auth.authenticate(email=email, password=password)
-        print(user)
+        email = request.data.get('email')
+        password = request.data.get('password')
+        user = auth.authenticate(request, email=email, password=password)
+
         if user is not None:
             auth.login(request, user)
-            print(request.user)
-            return Response([{'isLogged': True}])
-            # return Response([{'token': Token.objects.get_or_create(user=user)}])
-            # serializer = self.serializer_class(data=request.data,
-            #                                    context={'request': request})
-            # serializer.is_valid(raise_exception=True)
-            # user = serializer.validated_data['user']
-            # token, created = Token.objects.get_or_create(user=user)
-            # return Response({
-            #     'token': token.key,
-            #     'user_id': user.pk,
-            #     'email': user.email
-            # })
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({'isLogged': True, 'token': token.key})
         else:
-            return Response([{'errors': 'Senha ou usuários inválido'}])
+            return Response({'errors': 'Senha ou usuários inválido'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class AuthLogoutView(APIView):
+    """
+    Class used to perform user logout.
+    """
+
+    def post(self, request, format=None):
+        auth.logout(request)
+        return Response({'isLogged': False})
+
+
+class UserSearch(APIView):
+    """
+        Class used to search by
+        User using the storage
+    """
+    def get(self, request):
+        email = request.GET.get('email')
+        if email:
+            object_ = UserStorage(email)
+            possible_user = object_.get_by_email()
+            if possible_user:
+                return Response([possible_user])
+            else:
+                return Response([{'errors': 'Usuário não encontrado'}])
+        else:
+            return Response([{'errors': 'Necessário enviar um email válido'}])
