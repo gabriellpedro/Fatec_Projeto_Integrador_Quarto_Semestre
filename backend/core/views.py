@@ -16,6 +16,7 @@ import requests
 from django.contrib.auth.decorators import login_required
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from core.storage.materials_class import Materials
 
 
 
@@ -93,9 +94,8 @@ class RecicleMaterialsView(APIView):
         mesure unit and prices from recile materials
     """
     def get(self, request):
-        object_ = LitoralLimpoAPI()
-        object_.extract_materials()
-        return Response(object_.all_materials)
+        object_ = Materials()
+        return Response(object_.run())
     
 class RecicleMaterialsGraphView(APIView):
     '''

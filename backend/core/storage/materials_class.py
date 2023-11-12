@@ -22,9 +22,13 @@ class Materials(object):
                 for occurrence in self.materials_db:
                     if occurrence.is_active:
                         self.active_materials.append(occurrence)
-                return self.active_materials
+                return_elements = [element.__dict__ for element in self.active_materials]
+                _ = [element.pop('_state') for element in return_elements]
+                return return_elements
             else:
-                return [element for element in self.materials_db]
+                return_elements = [element.__dict__ for element in self.materials_db]
+                _ = [element.pop('_state') for element in return_elements]
+                return return_elements
 
     def __check_last_updated(self) -> bool:
         if not len(self.active_materials) > 0:
@@ -79,3 +83,4 @@ class Materials(object):
     def run(self) -> None:
         if not self.__check_last_updated():
             self.update_materials()
+        return self.get()
