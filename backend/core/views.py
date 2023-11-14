@@ -20,10 +20,6 @@ import requests
 from django.contrib.auth.decorators import login_required
 
 
-
-
-
-
 class RecicleMaterialsStatisticsView(APIView):
     """
         View used to extract information about 
@@ -186,3 +182,24 @@ class UserSearch(APIView):
                 return Response([{'errors': 'Usuário não encontrado'}])
         else:
             return Response([{'errors': 'Necessário enviar um email válido'}])
+
+
+class RecycleBalanceView(object):
+    """
+        Class used to receive a recyclebalance
+        operation, linking a user to a sell occurrence
+    """
+    def get(self, request):
+        user_id = request.GET.get('user_id')
+        material_id = request.GET.get('material_id')
+        errors = {'errors': list()}
+        if not user_id:
+            errors['errors'].append('Necessário enviar um Usuário Válido')
+        if not material_id:
+            errors['errors'].append('Necessário enviar um Material Válido')
+        object_ = UserStorage()
+        possible_user = object_.get_by_id(user_id)
+        object_material = Materials()
+        possible_material = object_material.get_by_id(material_id)
+        if not possible_material:
+            errors['errors'].append('Usuário não encontrado')

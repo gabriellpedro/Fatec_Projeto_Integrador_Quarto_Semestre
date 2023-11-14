@@ -84,7 +84,7 @@ class MaterialsToRecycle(models.Model):
     mesure_unity = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
 
-class MaterialsToRecycleOccurrence(models.Model):
+class RecycleBalanceOccurrence(models.Model):
     """
         Class used to save all materials
         occurrence, from the actives and the
@@ -92,8 +92,7 @@ class MaterialsToRecycleOccurrence(models.Model):
 
         One Occurrence
     """
-    material_id = models.IntegerField()
-    name = models.CharField(max_length=150)
+    recycle_balance_id = models.IntegerField()
 
     class Meta:
         abstract = True
@@ -112,4 +111,4 @@ class OperationsBalance(models.Model):
     user_id = models.IntegerField()
     total = models.FloatField()
     operation_type = models.IntegerField()
-    balance_ids = models.ArrayField(model_container=MaterialsToRecycleOccurrence)
+    balance_ids = models.ArrayField(model_container=RecycleBalanceOccurrence)
