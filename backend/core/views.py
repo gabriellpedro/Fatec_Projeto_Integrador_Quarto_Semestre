@@ -292,7 +292,7 @@ class OperationsBalanceView(APIView):
         if not len(user_open_list.keys()) > 0:
             return Response([{'errors': 'Usuário não possui lista aberta'}])
         if len(errors['errors']) > 0:
-           return Response([errors])            
+           return Response([errors])
         recyle_balance_occurrences = list()
         for recycle_balance in user_open_list['recicle_balance_array']:
             recyle_balance_occurrence = {'recycle_balance_id': recycle_balance['id']}
@@ -309,8 +309,13 @@ class OperationsBalanceView(APIView):
         else:
             return Response([{'errors': 'Usuário não possui ocorrências na Balança'}])
 
+
+class UserControlView(APIView):
+    """
+        Class used to return the
+        users amount
+    """
     def get(self, request):
-        # TO DO: Create a class for user control
         user_id = request.POST.get('user_id_occurrence')
         errors = {'errors': list()}
         if not user_id:
