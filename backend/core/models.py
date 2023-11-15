@@ -66,9 +66,9 @@ class RecycleBalance(models.Model):
         added to the client OperationsBalance as a positive operation
     """
     date_balance = models.DateTimeField(auto_now_add=True)
-    user_id = models.IntegerField()
+    user_id_occurrence = models.IntegerField()
     material_id = models.IntegerField()
-    mesure = models.FloatField()
+    mesure = models.FloatField(default=1)
     is_active = models.BooleanField(default=True)
 
 class MaterialsToRecycle(models.Model):

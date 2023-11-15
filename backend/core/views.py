@@ -4,6 +4,7 @@ from country_apis_consume.libs.states_information_class import StateInformation
 from recicle_apis_consume.libs.litorallimpo_class import LitoralLimpoAPI
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.views.decorators.csrf import ensure_csrf_cookie
+from core.storage.recycle_balance_class import RecycleBalanceStorage
 from rest_framework.permissions import IsAuthenticated
 from core.storage.materials_class import Materials
 from rest_framework.authtoken.models import Token
@@ -12,6 +13,8 @@ from rest_framework.response import Response
 from django.contrib.auth.models import auth
 from rest_framework.views import APIView
 from django.http import JsonResponse
+from rest_framework import status
+from .models import RecycleBalance
 from core.forms import UserForm
 import plotly.express as px
 from .models import User
@@ -146,6 +149,7 @@ class AuthLoginView(APIView):
     def post(self, request, format=None):
         email = request.data.get('email')
         password = request.data.get('password')
+        print(email, password)
         user = auth.authenticate(request, email=email, password=password)
 
         if user is not None:
@@ -175,7 +179,7 @@ class UserSearch(APIView):
         email = request.GET.get('email')
         if email:
             object_ = UserStorage(email)
-            possible_user = object_.get_by_email()
+            possible_user = object_.get_by_email(email)
             if possible_user:
                 return Response([possible_user])
             else:
@@ -184,22 +188,49 @@ class UserSearch(APIView):
             return Response([{'errors': 'Necessário enviar um email válido'}])
 
 
-class RecycleBalanceView(object):
+class RecycleBalanceView(APIView):
     """
         Class used to receive a recyclebalance
         operation, linking a user to a sell occurrence
     """
-    def get(self, request):
-        user_id = request.GET.get('user_id')
-        material_id = request.GET.get('material_id')
+    def post(self, request):
+        user_id = request.POST.get('user_id_occurrence')
+        material_id = request.POST.get('material_id')
+        mesure = request.POST.get('mesure')
         errors = {'errors': list()}
         if not user_id:
             errors['errors'].append('Necessário enviar um Usuário Válido')
         if not material_id:
             errors['errors'].append('Necessário enviar um Material Válido')
+        if not mesure:
+            errors['errors'].append('Necessário enviar uma Medida Válido')
         object_ = UserStorage()
-        possible_user = object_.get_by_id(user_id)
         object_material = Materials()
+        possible_user = object_.get_by_id(user_id)
         possible_material = object_material.get_by_id(material_id)
-        if not possible_material:
+        if not possible_user:
             errors['errors'].append('Usuário não encontrado')
+        if not possible_material:
+            errors['errors'].append('Material não encontrado')
+        if mesure:
+            try:
+                mesure = float(mesure.replace(',', '.'))
+                if not mesure > 0:
+                    errors['errors'].append('Medida precisa ser maior que zero')
+            except (TypeError, ValueError):
+                errors['errors'].append('Medida precisa ser do tipo Flutuante')
+        if len(errors['errors']) > 0:
+           return Response([errors])
+        recicle_balance_occurrence = RecycleBalance(
+            user_id_occurrence=user_id,
+            material_id=material_id,
+            mesure=mesure).save()
+        return Response([errors], status=status.HTTP_201_CREATED)
+
+    def get(self, request):
+        user_id = request.GET.get('user_id_occurrence')
+        print(user_id)
+        if not user_id:
+            return Response([{'errors': 'Necessário enviar um usuário válido'}])
+        object_ = RecycleBalanceStorage()
+        return Response([object_.get_activate_by_user_id(user_id)])
