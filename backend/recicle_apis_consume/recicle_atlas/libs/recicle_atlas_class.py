@@ -1,4 +1,4 @@
-from recicle_apis_consume.libs.manager import Manager
+from manager.manager import Manager
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 

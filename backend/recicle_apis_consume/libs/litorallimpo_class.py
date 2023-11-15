@@ -1,4 +1,4 @@
-from recicle_apis_consume.libs.manager import Manager
+from manager.manager import Manager
 import requests
 
 
@@ -21,10 +21,6 @@ class LitoralLimpoAPI(Manager):
             'ninja_table_public_nonce': '95c03727d4',
         }
         self.all_materials = list()
-        self.possible_request_error = (requests.exceptions.ConnectTimeout,
-                                        requests.exceptions.SSLError,
-                                        requests.exceptions.ConnectionError,
-                                        requests.exceptions.ReadTimeout)
 
     def extract_materials(self) -> None:
         for id_ in self.table_ids:
