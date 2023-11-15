@@ -28,6 +28,20 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+
 AUTH_USER_MODEL = "core.User"
 
 # Application definition
@@ -99,7 +113,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'ecoponto',
         'CLIENT': {
-                 'host': 'mongodb+srv://gabrielpedro47:bXBAm6DKhtIVdm99@ecoponto.trwzb0l.mongodb.net/?retryWrites=true&w=majority'
+                 'host': 'mongodb+srv://gabrielpedro47:bXBAm6DKhtIVdm99@ecoponto.trwzb0l.mongodb.net/?retryWrites=false&w=majority'
         }
     }
 }

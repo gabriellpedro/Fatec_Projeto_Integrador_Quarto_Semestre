@@ -3,7 +3,6 @@ from core.models import MaterialsToRecycle
 from datetime import datetime
 
 
-
 class Materials(object):
     """
         Class used to trat materials and
@@ -29,6 +28,13 @@ class Materials(object):
                 return_elements = [element.__dict__ for element in self.materials_db]
                 _ = [element.pop('_state') for element in return_elements]
                 return return_elements
+
+    def get_by_id(self, material_id: int) -> dict:
+        material_occurrence = MaterialsToRecycle.objects.all().filter(id=material_id)
+        if len(material_occurrence) == 1:
+            material_occurrence = material_occurrence[0].__dict__
+            _ = material_occurrence.pop('_state')
+            return material_occurrence
 
     def __check_last_updated(self) -> bool:
         if not len(self.active_materials) > 0:

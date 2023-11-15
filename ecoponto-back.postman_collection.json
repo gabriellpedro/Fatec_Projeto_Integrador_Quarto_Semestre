@@ -1,0 +1,349 @@
+{
+	"info": {
+		"_postman_id": "bca612cb-e787-4604-9316-f38f49244fd4",
+		"name": "ecoponto-back",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "ecoponto@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/materials/user_search/?email=ecoponto@gmail.com",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"materials",
+						"user_search",
+						""
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "ecoponto@gmail.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user-register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": " ecoponto@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": " eco123",
+							"type": "text"
+						},
+						{
+							"key": "confirm_password",
+							"value": " eco123",
+							"type": "text"
+						},
+						{
+							"key": "is_staff",
+							"value": " true",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": " Ecoponto",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/materials/register/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"materials",
+						"register",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user-login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "ecoponto@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "eco123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/materials/logout/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"materials",
+						"logout",
+						""
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "ecoponto@gmail.com",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "eco123",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user-logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "ecoponto@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "eco123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/materials/login/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"materials",
+						"login",
+						""
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "ecoponto@gmail.com",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "eco123",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "materials",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/materials/getmaterials/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"materials",
+						"getmaterials",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recycle_balance",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_id_occurrence",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "material_id",
+							"value": "50",
+							"type": "text"
+						},
+						{
+							"key": "mesure",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/materials/recycle_balance/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"materials",
+						"recycle_balance",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recycle_balance",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_id",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/materials/recycle_balance/?user_id_occurrence=3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"materials",
+						"recycle_balance",
+						""
+					],
+					"query": [
+						{
+							"key": "user_id_occurrence",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

@@ -66,9 +66,9 @@ class RecycleBalance(models.Model):
         added to the client OperationsBalance as a positive operation
     """
     date_balance = models.DateTimeField(auto_now_add=True)
-    user_id = models.IntegerField()
+    user_id_occurrence = models.IntegerField()
     material_id = models.IntegerField()
-    mesure = models.FloatField()
+    mesure = models.FloatField(default=1)
     is_active = models.BooleanField(default=True)
 
 class MaterialsToRecycle(models.Model):
@@ -84,7 +84,7 @@ class MaterialsToRecycle(models.Model):
     mesure_unity = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
 
-class MaterialsToRecycleOccurrence(models.Model):
+class RecycleBalanceOccurrence(models.Model):
     """
         Class used to save all materials
         occurrence, from the actives and the
@@ -92,8 +92,7 @@ class MaterialsToRecycleOccurrence(models.Model):
 
         One Occurrence
     """
-    material_id = models.IntegerField()
-    name = models.CharField(max_length=150)
+    recycle_balance_id = models.IntegerField()
 
     class Meta:
         abstract = True
@@ -107,9 +106,26 @@ class OperationsBalance(models.Model):
         changes on his final account number
 
         ArrayField(ids) => from RecycleBalance
+
+        operation_type == 1:
+            positive (+)
+
+        operation_type == 0:
+            positive (-)
     """
     created_at = models.DateTimeField(auto_now_add=True)
     user_id = models.IntegerField()
     total = models.FloatField()
     operation_type = models.IntegerField()
-    balance_ids = models.ArrayField(model_container=MaterialsToRecycleOccurrence)
+    balance_ids = models.ArrayField(model_container=RecycleBalanceOccurrence)
+
+class UserControl(models.Model):
+    """
+        Class used to the
+        final value from user
+    """
+    created_at = models.DateTimeField(auto_now_add=True)
+    user_id = models.IntegerField()
+    current_total = models.FloatField()
+    total_earned = models.FloatField()
+    last_operation = models.DateTimeField()
