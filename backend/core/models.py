@@ -106,9 +106,26 @@ class OperationsBalance(models.Model):
         changes on his final account number
 
         ArrayField(ids) => from RecycleBalance
+
+        operation_type == 1:
+            positive (+)
+
+        operation_type == 0:
+            positive (-)
     """
     created_at = models.DateTimeField(auto_now_add=True)
     user_id = models.IntegerField()
     total = models.FloatField()
     operation_type = models.IntegerField()
     balance_ids = models.ArrayField(model_container=RecycleBalanceOccurrence)
+
+class UserControl(models.Model):
+    """
+        Class used to the
+        final value from user
+    """
+    created_at = models.DateTimeField(auto_now_add=True)
+    user_id = models.IntegerField()
+    current_total = models.FloatField()
+    total_earned = models.FloatField()
+    last_operation = models.DateTimeField()

@@ -15,6 +15,8 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from rest_framework import status
 from .models import RecycleBalance
+from .models import RecycleBalanceOccurrence
+from .models import OperationsBalance
 from core.forms import UserForm
 import plotly.express as px
 from .models import User
@@ -159,7 +161,6 @@ class AuthLoginView(APIView):
         else:
             return Response({'errors': 'Senha ou usuários inválido'}, status=status.HTTP_401_UNAUTHORIZED)
 
-
 class AuthLogoutView(APIView):
     """
     Class used to perform user logout.
@@ -234,3 +235,91 @@ class RecycleBalanceView(APIView):
             return Response([{'errors': 'Necessário enviar um usuário válido'}])
         object_ = RecycleBalanceStorage()
         return Response([object_.get_activate_by_user_id(user_id)])
+
+    def put(self, request):
+        alterable_keys = [mesure, is_active]
+        id_ = request.POST.get('recycle_balance_id')
+        mesure = request.POST.get('mesure')
+        is_active = request.POST.get('is_active')
+        if mesure:
+            try:
+                mesure = float(mesure.replace(',', '.'))
+                if not mesure > 0:
+                    errors['errors'].append('Medida precisa ser maior que zero')
+            except (TypeError, ValueError):
+                errors['errors'].append('Medida precisa ser do tipo Flutuante')
+        if not id_:
+            errors['errors'].append('Necessário adicionar o id da ocorrência da balança')
+            return Response([errors])
+        object_ = RecycleBalanceStorage()
+        recicle_balance_occurrence = object_.get_by_id(id_, True)
+        if not recicle_balance_occurrence:
+            return Response([{'errors': 'Não foi possível encontrar a ocorrência da balança'}])
+        if len(errors['errors']) > 0:
+           return Response([errors])
+        has_changes = bool()
+        if mesure and not mesure != recicle_balance_occurrence.mesure:
+            errors['errors'].append('Medida igual a anterior')
+        elif mesure:
+            recicle_balance_occurrence.mesure = mesure
+            has_changes = True
+        if is_active and not is_active != recicle_balance_occurrence.is_active:
+            errors['errors'].append('Medida igual a anterior')
+        elif is_active:
+            recicle_balance_occurrence.is_active = is_active
+            has_changes = True
+        if len(errors['errors']) > 0:
+           return Response([errors])
+        elif has_changes:
+            recicle_balance_occurrence.save()
+            return Response([errors], status=status.HTTP_204_NO_CONTENT)
+
+class OperationsBalanceView(APIView):
+    """
+        Class responsible to get all active
+        RecycleBalance occurrences and build one
+        client operation, and inactivate the recycle
+        balance occurrences
+    """
+    def post(self, request):
+        user_id = request.POST.get('user_id_occurrence')
+        errors = {'errors': list()}
+        if not user_id:
+            errors['errors'].append('Necessário enviar um Usuário Válido')
+        object_ = RecycleBalanceStorage()
+        user_open_list = object_.get_activate_by_user_id(user_id)
+        object_user = UserStorage()
+        if not len(user_open_list.keys()) > 0:
+            return Response([{'errors': 'Usuário não possui lista aberta'}])
+        if len(errors['errors']) > 0:
+           return Response([errors])            
+        recyle_balance_occurrences = list()
+        for recycle_balance in user_open_list['recicle_balance_array']:
+            recyle_balance_occurrence = {'recycle_balance_id': recycle_balance['id']}
+            control = object_.deactivate_recycle_balance_occurrence(recycle_balance['id'])
+            recyle_balance_occurrences.append(recyle_balance_occurrence)
+        if len(recyle_balance_occurrences) > 0:
+            _ = OperationsBalance(
+                user_id=user_id,
+                total=user_open_list['final_value'],
+                operation_type=1,
+                balance_ids=recyle_balance_occurrences).save()
+            _ = object_user.alter_user_value(user_id, user_open_list['final_value'], 1)
+            return Response([{'errors': 'Operação Finalizada'}], status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response([{'errors': 'Usuário não possui ocorrências na Balança'}])
+
+    def get(self, request):
+        # TO DO: Create a class for user control
+        user_id = request.POST.get('user_id_occurrence')
+        errors = {'errors': list()}
+        if not user_id:
+            errors['errors'].append('Necessário enviar um Usuário Válido')
+        if len(errors['errors']) > 0:
+           return Response([errors])    
+        object_user = UserStorage()
+        possible_user = object_user.get_by_id_control(user_id)
+        if possible_user:
+            return Response([possible_user])
+        else:
+            return Response([{'errors': 'Usuário não encontrado ou não possui nenhuma operação'}])
