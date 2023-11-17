@@ -8,7 +8,7 @@
 }
 .states .statesTitle {
   font-family: Arial, Helvetica, sans-serif !important;
-  font-size: 60px;
+  font-size: 50px;
 }
 
 .stateList {
@@ -23,9 +23,9 @@
 
 .stateOccurrence {
   border-radius: 15px;
-  width: 400px;
-  height: 430px;
-  margin: 20px;
+  width: 300px;
+  height: 350px;
+  margin: 15px;
   box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
 }
 .stateOccurrence:hover {
