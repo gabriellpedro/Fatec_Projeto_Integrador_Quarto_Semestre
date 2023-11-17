@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 // third-party
 import { motion, useCycle } from 'framer-motion';
-
+// import {useCycle, motion} from "framer-motion/dist/framer-motion";
 // ==============================|| ANIMATION BUTTON ||============================== //
 
 const AnimateButton = forwardRef(({ children, type, direction, offset, scale }, ref) => {
