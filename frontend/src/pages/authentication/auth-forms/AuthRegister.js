@@ -75,7 +75,7 @@ const FirebaseRegister = ({ ...others }) => {
   return (
     <>
       <Grid container direction="column" justifyContent="center" spacing={2}>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <AnimateButton>
             <Button
               variant="outlined"
@@ -117,10 +117,10 @@ const FirebaseRegister = ({ ...others }) => {
             </Button>
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
           </Box>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} container alignItems="center" justifyContent="center">
           <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1">Sign up with Email address</Typography>
+            <Typography variant="subtitle1">Cadastre-se pelo seu email</Typography>
           </Box>
         </Grid>
       </Grid>
@@ -178,7 +178,7 @@ const FirebaseRegister = ({ ...others }) => {
               </Grid>
             </Grid>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-email-register">Email Address / Username</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-email-register">Email</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-email-register"
                 type="email"
@@ -196,7 +196,7 @@ const FirebaseRegister = ({ ...others }) => {
             </FormControl>
 
             <FormControl fullWidth error={Boolean(touched.password && errors.password)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-password-register">Password</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-password-register">Senha</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-password-register"
                 type={showPassword ? 'text' : 'password'}
@@ -255,9 +255,9 @@ const FirebaseRegister = ({ ...others }) => {
                   }
                   label={
                     <Typography variant="subtitle1">
-                      Agree with &nbsp;
+                      Aceito&nbsp;
                       <Typography variant="subtitle1" component={Link} to="#">
-                        Terms & Condition.
+                        Termos & Condições.
                       </Typography>
                     </Typography>
                   }
@@ -273,7 +273,7 @@ const FirebaseRegister = ({ ...others }) => {
             <Box sx={{ mt: 2 }}>
               <AnimateButton>
                 <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
-                  Sign up
+                  Cadastrar
                 </Button>
               </AnimateButton>
             </Box>

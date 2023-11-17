@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-
+import { React } from 'react';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
@@ -37,10 +37,10 @@ const Register = () => {
                       <Grid item>
                         <Stack alignItems="center" justifyContent="center" spacing={1}>
                           <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
-                            Sign up
+                            Cadastrar
                           </Typography>
                           <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : 'inherit'}>
-                            Enter your credentials to continue
+                            Cadastre suas credenciais
                           </Typography>
                         </Stack>
                       </Grid>
@@ -54,8 +54,8 @@ const Register = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <Grid item container direction="column" alignItems="center" xs={12}>
-                      <Typography component={Link} to="/pages/login/login3" variant="subtitle1" sx={{ textDecoration: 'none' }}>
-                        Already have an account?
+                      <Typography component={Link} to="/user/login" variant="subtitle1" sx={{ textDecoration: 'none' }}>
+                        Possui uma conta?
                       </Typography>
                     </Grid>
                   </Grid>
@@ -64,9 +64,9 @@ const Register = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
+        {/* <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
           <AuthFooter />
-        </Grid>
+        </Grid> */}
       </Grid>
     </AuthWrapper1>
   );

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
+// import { Provider } from 'react-redux';
 import {
   Box,
   Button,
@@ -20,6 +21,7 @@ import {
   Typography,
   useMediaQuery
 } from '@mui/material';
+// import { ReactSession }  from 'react-client-session';
 
 // third party
 import * as Yup from 'yup';
@@ -60,7 +62,7 @@ const FirebaseLogin = ({ ...others }) => {
   return (
     <>
       <Grid container direction="column" justifyContent="center" spacing={2}>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <AnimateButton>
             <Button
               disableElevation
@@ -110,15 +112,15 @@ const FirebaseLogin = ({ ...others }) => {
 
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
           </Box>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} container alignItems="center" justifyContent="center">
           <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1">Sign in with Email address</Typography>
+            <Typography variant="subtitle1">Entre pelo o seu email</Typography>
           </Box>
         </Grid>
       </Grid>
 
-      <Formik
+      {/* <Formik
         initialValues={{
           email: 'info@codedthemes.com',
           password: '123456',
@@ -143,11 +145,55 @@ const FirebaseLogin = ({ ...others }) => {
             }
           }
         }}
+      > */}
+      <Formik
+        initialValues={{
+          email: 'ecoponto@gmail.com',
+          password: 'eco123',
+          submit: null
+        }}
+        validationSchema={Yup.object().shape({
+          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+          password: Yup.string().max(255).required('Password is required')
+        })}
+        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          try {
+            const response = await fetch('http://localhost:8000/materials/login/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                // Add any other headers you need, such as authorization tokens
+              },
+              body: JSON.stringify(values),
+            });
+
+            const data = await response.json();
+
+            if (scriptedRef.current) {
+              // Check if the login was successful based on the response from the server
+              if (response.ok) {
+                console.log(data.token);
+                setStatus({ success: true });
+              } else {
+                setStatus({ success: false });
+                setErrors({ submit: data.message || 'Login failed' });
+              }
+              setSubmitting(false);
+            }
+          } catch (err) {
+            console.error(err);
+            if (scriptedRef.current) {
+              setStatus({ success: false });
+              setErrors({ submit: err.message });
+              setSubmitting(false);
+            }
+          }
+        }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit} {...others}>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-email-login">Email</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-email-login"
                 type="email"
@@ -166,7 +212,7 @@ const FirebaseLogin = ({ ...others }) => {
             </FormControl>
 
             <FormControl fullWidth error={Boolean(touched.password && errors.password)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-password-login">Senha</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-password-login"
                 type={showPassword ? 'text' : 'password'}
@@ -201,10 +247,10 @@ const FirebaseLogin = ({ ...others }) => {
                 control={
                   <Checkbox checked={checked} onChange={(event) => setChecked(event.target.checked)} name="checked" color="primary" />
                 }
-                label="Remember me"
+                label="Salvar credenciais"
               />
               <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
-                Forgot Password?
+                Esqueci a senha
               </Typography>
             </Stack>
             {errors.submit && (

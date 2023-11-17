@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-
+import { React } from 'react';
 // material-ui
 import { Box } from '@mui/material';
 
