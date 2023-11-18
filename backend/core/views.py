@@ -77,7 +77,14 @@ class RecicleMaterialsView(APIView):
     """
     def get(self, request):
         object_ = Materials()
-        return Response(object_.run())
+        possible_materials = request.GET.get('material_search')
+        if possible_materials:
+            possible_result = object_.get_by_name(possible_materials)
+            if not possible_result or len(possible_result) == 0:
+                return Response([{'errors': 'Material não encontrado'}])
+            return Response(possible_result)
+        else:
+            return Response(object_.run())
     
 class RecicleMaterialsGraphView(APIView):
     '''
