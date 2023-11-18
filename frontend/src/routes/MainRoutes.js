@@ -11,6 +11,7 @@ const RecycleMaterialsLoad = Loadable(lazy(() => import('../pages/RecycleMateria
 const RecycleStatisticsLoad = Loadable(lazy(() => import('../pages/RecycleStatistics')));
 const CitiesStatisticsLoad = Loadable(lazy(() => import('../pages/CitiesStatistics')));
 const HomeLoad = Loadable(lazy(() => import('../pages/Home')));
+const BalanceLoad = Loadable(lazy(() => import('../pages/Balance')));
 
 
 // sample page routing
@@ -54,6 +55,10 @@ const MainRoutes = {
     {
       path: 'reciclestatistics/:state',
       element: <CitiesStatisticsLoad />,
+    },
+    {
+      path: 'balance',
+      element: <BalanceLoad />,
     },
     ]
   }
