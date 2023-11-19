@@ -36,6 +36,16 @@ class Materials(object):
             _ = material_occurrence.pop('_state')
             return material_occurrence
 
+    def get_by_name(self, possible_materials: str) -> dict:
+        material_occurrences = MaterialsToRecycle.objects.filter(name__contains=possible_materials)
+        temp_list = list()
+        if len(material_occurrences) > 0:
+            for possible_material in material_occurrences:
+                possible_material = possible_material.__dict__
+                _ = possible_material.pop('_state')
+                temp_list.append(possible_material)
+            return temp_list
+
     def __check_last_updated(self) -> bool:
         if not len(self.active_materials) > 0:
             self.get()
@@ -88,5 +98,8 @@ class Materials(object):
 
     def run(self) -> None:
         if not self.__check_last_updated():
-            self.update_materials()
+            try:
+                self.update_materials()
+            except:
+                pass
         return self.get()

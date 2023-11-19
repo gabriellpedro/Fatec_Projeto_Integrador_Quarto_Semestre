@@ -17,6 +17,7 @@
     "formik": "^2.4.5",
     "framer-motion": "^10.16.5",
     "material-ui-popup-state": "^5.0.10",
+    "mdb-react-ui-kit": "^7.0.0",
     "react": "^18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
@@ -36,12 +37,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -53,5 +48,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }
