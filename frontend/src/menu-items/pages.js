@@ -1,11 +1,13 @@
 // assets
 import { IconKey } from '@tabler/icons-react';
 import { IconChartArrowsVertical } from '@tabler/icons-react';
+import { IconScale } from '@tabler/icons-react';
 
 // constant
 const icons = {
   IconKey,
-  IconChartArrowsVertical
+  IconChartArrowsVertical,
+  IconScale,
 };
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
@@ -58,6 +60,22 @@ const pages = {
           title: 'Cidades',
           type: 'item',
           url: '/',
+          target: false
+        }
+      ]
+    },
+    {
+      id: 'balance',
+      title: 'Balança',
+      type: 'collapse',
+      icon: icons.IconScale,
+
+      children: [
+        {
+          id: 'clientbalance',
+          title: 'Balança Específica',
+          type: 'item',
+          url: '/balance/',
           target: false
         }
       ]
