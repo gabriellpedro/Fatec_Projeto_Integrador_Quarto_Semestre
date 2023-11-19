@@ -118,7 +118,7 @@ MobileSearch.propTypes = {
 const SearchSection = () => {
   const theme = useTheme();
   const [value, setValue] = useState('');
-
+  console.log(value)
   return (
     <>
       <Box sx={{ display: { xs: 'block', md: 'none' } }}>
