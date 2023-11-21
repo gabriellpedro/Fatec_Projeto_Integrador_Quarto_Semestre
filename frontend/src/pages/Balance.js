@@ -10,22 +10,78 @@ import {
   MDBRow,
   MDBTypography,
   } from "mdb-react-ui-kit";
-  import React from "react";
+  import {React, useState, useEffect} from "react";
   import 'mdb-react-ui-kit/dist/css/mdb.min.css';
   // import GenericProduct from "../assets/images/icons/generic_product.avif"
   import BalanceOccurrence from "../components/BalanceOccurrence"
   import BalanceOccurrenceSmall from "../components/BalanceOccurrenceSmall"
   import Logo from '../assets/logo.png';
   import SearchSection from '../layout/MainLayout/Header/SearchSection/index';
-  
+  import SearchMaterial from '../layout/MainLayout/Header/SearchSection/SearchMaterial';
+  // import * as BackRequests from '../hooks/BackRequests';
+  import HandleMaterials from '../hooks/BackRequests';
+
+
 function Balance() {
+
+  const [materialComponents, setMaterialComponents] = useState([]);
+  const [searchResult, setSearchResult] = useState(null);
+  const [isComponentMounted, setIsComponentMounted] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!isComponentMounted) {
+        // Call HandleMaterials on the initial render
+        setIsComponentMounted(true);
+        await HandleMaterials({ setMaterialComponents, value: ''});
+      } else if (searchResult !== null) {
+        await HandleMaterials({ setMaterialComponents, value: searchResult });
+      }
+    };
+
+    fetchData();
+  }, [isComponentMounted, searchResult]);
+
+  console.log('searchResult', searchResult)
+  const updateSearchResult = (result) => {
+    setSearchResult(result);
+  }
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       try {
+  //         const res = await BackRequests.getSpecificMaterials(result);
+  
+  
+  //         if (res) {
+  //           const components = res.map((materialOccurrence, key) => (
+  //             <BalanceOccurrence
+  //               key={key}
+  //               name={materialOccurrence.name}
+  //               price={materialOccurrence.price}
+  //               mesure="0"
+  //               mesure_unity={materialOccurrence.mesure_unity}
+  //             />
+  
+  //           ));
+  //           console.log('Material components:', components); 
+  //           setMaterialComponents(components);
+  //         }
+  //       } catch (error) {
+  //         console.error('Error fetching materials:', error);
+  //       }
+  //     };
+  
+  //     fetchData(); // Call the function to fetch data when the component mounts
+  //   }, []); // Empty dependency array ensures this effect runs once on mount
+  // };
+
   return (
-  <section className="h-100 h-custom" style={{ backgroundColor: "#eee" }}>
-    <MDBContainer className="py-5 h-100">
-      <MDBRow className="justify-content-center align-items-center h-100">
+  <section className="h-85 h-custom" style={{ backgroundColor: "#eee" }}>
+    <MDBContainer className="py-3 h-80">
+      <MDBRow className="justify-content-center align-items-center h-80">
         <MDBCol>
           <MDBCard>
-            <MDBCardBody className="p-4">
+            <MDBCardBody className="p-2">
               <MDBRow>
                 <MDBCol lg="7" style={{ overflowY: 'auto', maxHeight: '500px' }}>
                   <MDBTypography tag="h5">
@@ -33,11 +89,9 @@ function Balance() {
                       <MDBIcon fas icon="long-arrow-alt-left me-2" /> Continue
                       shopping
                     </a> */}
-                    <SearchSection />
+                    <SearchMaterial onUpdateValue={updateSearchResult}/>
                   </MDBTypography>
-  
                   <hr />
-  
                   <div className="d-flex justify-content-between align-items-center mb-4">
                     <div>
                       <p className="mb-1">Balança atual</p>
@@ -53,60 +107,8 @@ function Balance() {
                       </p>
                     </div>
                   </div>
-                    <BalanceOccurrence 
-                      name="Material Reciclável"
-                      mesure="2"
-                      price="9"
-                      mesure_unity="KG"
-                    />
-                    <BalanceOccurrence 
-                      name="Material Reciclável"
-                      mesure="2"
-                      price="9"
-                      mesure_unity="KG"
-                    />
-                    <BalanceOccurrence 
-                      name="Material Reciclável"
-                      mesure="2"
-                      price="9"
-                      mesure_unity="KG"
-                    />
-                    <BalanceOccurrence 
-                      name="Material Reciclável"
-                      mesure="2"
-                      price="9"
-                      mesure_unity="KG"
-                    />
-                    <BalanceOccurrence 
-                      name="Material Reciclável"
-                      mesure="2"
-                      price="9"
-                      mesure_unity="KG"
-                    />
-                    <BalanceOccurrence 
-                      name="Material Reciclável"
-                      mesure="2"
-                      price="9"
-                      mesure_unity="KG"
-                    />
-                    <BalanceOccurrence 
-                      name="Material Reciclável"
-                      mesure="2"
-                      price="9"
-                      mesure_unity="KG"
-                    />
-                    <BalanceOccurrence 
-                      name="Material Reciclável"
-                      mesure="2"
-                      price="9"
-                      mesure_unity="KG"
-                    />
-                    <BalanceOccurrence 
-                      name="Material Reciclável"
-                      mesure="2"
-                      price="9"
-                      mesure_unity="KG"
-                    />
+                {/* <HandleMaterials setMaterialComponents={setMaterialComponents} onUpdateSearchResult={UpdateMaterials}/> */}
+                  {materialComponents}
                 </MDBCol>
   
                 <MDBCol lg="5">
@@ -122,7 +124,7 @@ function Balance() {
   
                       <p className="small">Items pesados: </p>
 
-                      <MDBCol lg="8" style={{ overflowY: 'auto', maxHeight: '200px' }}>
+                      <MDBCol lg="12" style={{ overflowY: 'auto', maxHeight: '200px' }}>
                           <BalanceOccurrenceSmall 
                           name="Material Reciclável"
                           mesure="2"
@@ -166,25 +168,6 @@ function Balance() {
                           <MDBIcon fab icon="cc-paypal fa-2x me-2" />
                         </a>
                       </MDBCol>
-                      {/* <form className="mt-4">
-                        <MDBInput className="mb-4" label="Cardholder's Name" type="text" size="lg"
-                          placeholder="Cardholder's Name" contrast />
-  
-                        <MDBInput className="mb-4" label="Card Number" type="text" size="lg"
-                          minLength="19" maxLength="19" placeholder="1234 5678 9012 3457" contrast />
-  
-                        <MDBRow className="mb-4">
-                          <MDBCol md="6">
-                            <MDBInput className="mb-4" label="Expiration" type="text" size="lg"
-                              minLength="7" maxLength="7" placeholder="MM/YYYY" contrast />
-                          </MDBCol>
-                          <MDBCol md="6">
-                            <MDBInput className="mb-4" label="Cvv" type="text" size="lg" minLength="3"
-                              maxLength="3" placeholder="&#9679;&#9679;&#9679;" contrast />
-                          </MDBCol>
-                        </MDBRow>
-                      </form> */}
-  
                       <hr />
   
                       <div className="d-flex justify-content-between">
@@ -222,7 +205,7 @@ function Balance() {
     </MDBContainer>
   </section>
   );
-  }
+};
 
 
 export default Balance;

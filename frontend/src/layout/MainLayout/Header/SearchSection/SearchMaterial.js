@@ -61,11 +61,21 @@ const HeaderAvatarStyle = styled(Avatar, { shouldForwardProp })(({ theme }) => (
 const MobileSearch = ({ value, setValue, popupState }) => {
   const theme = useTheme();
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      // Trigger the backend request here
+      onUpdateValue(value);
+      // You can call your backend function or dispatch an action here
+    }
+  };
+
   return (
     <OutlineInputStyle
       id="input-search-header"
       value={value}
       onChange={(e) => setValue(e.target.value)}
+      onKeyDown={handleKeyPress}
       placeholder="Search"
       startAdornment={
         <InputAdornment position="start">
@@ -115,10 +125,21 @@ MobileSearch.propTypes = {
 
 // ==============================|| SEARCH INPUT ||============================== //
 
-const SearchSection = () => {
+const SearchMaterial = ({ onUpdateValue }) => {
   const theme = useTheme();
   const [value, setValue] = useState('');
   console.log(value)
+
+  
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      // Trigger the backend request here
+      onUpdateValue(value);
+      // You can call your backend function or dispatch an action here
+    }
+  };
+
   return (
     <>
       <Box sx={{ display: { xs: 'block', md: 'none' } }}>
@@ -166,6 +187,7 @@ const SearchSection = () => {
           id="input-search-header"
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          onKeyDown={handleKeyPress}
           placeholder="Search"
           startAdornment={
             <InputAdornment position="start">
@@ -189,4 +211,4 @@ const SearchSection = () => {
   );
 };
 
-export default SearchSection;
+export default SearchMaterial;
