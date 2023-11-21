@@ -14,6 +14,7 @@ import NavigationScroll from './layout/NavigationScroll';
 import { ThemeProvider } from '@mui/material/styles';
 import themes from './themes';
 import React from 'react';
+import { UserProvider } from './hooks/UserContext';
 // import Login from './pages/authentication/authentication/Login'
 // import Register from './pages/authentication/authentication/Register'
 
@@ -55,15 +56,17 @@ const App = () => {
   const customization = useSelector((state) => state.customization);
 
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={themes(customization)}>
-        <CssBaseline />
-        <NavigationScroll>
-          <Routes />
-        </NavigationScroll>
-        <Footer />
-      </ThemeProvider>
-    </StyledEngineProvider>
+    <UserProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={themes(customization)}>
+          <CssBaseline />
+          <NavigationScroll>
+            <Routes />
+          </NavigationScroll>
+          <Footer />
+        </ThemeProvider>
+      </StyledEngineProvider>
+    </UserProvider>
   );
 };
 

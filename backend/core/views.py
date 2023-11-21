@@ -164,7 +164,11 @@ class AuthLoginView(APIView):
         if user is not None:
             auth.login(request, user)
             token, created = Token.objects.get_or_create(user=user)
-            return Response({'isLogged': True, 'token': token.key})
+            return Response({'isLogged': True, 
+                            'token': token.key,
+                            'user_id': user.id, 
+                            'email': user.email,
+                            'username': user.name,})
         else:
             return Response({'errors': 'Senha ou usuários inválido'}, status=status.HTTP_401_UNAUTHORIZED)
 

@@ -35,6 +35,7 @@ import MainCard from '../../../../components/cards/MainCard';
 import Transitions from '../../../../components/extended/Transitions';
 import UpgradePlanCard from './UpgradePlanCard';
 import User1 from '../../../../assets/images/users/user.svg';
+import { useUser } from '../../../../hooks/UserContext';
 
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-react';
@@ -45,6 +46,7 @@ const ProfileSection = () => {
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
+  const { userData } = useUser();
 
   const [sdm, setSdm] = useState(true);
   const [value, setValue] = useState('');
@@ -159,7 +161,7 @@ const ProfileSection = () => {
                       <Stack direction="row" spacing={0.5} alignItems="center">
                         <Typography variant="h4">Olá,</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                          Ecoponto
+                        {userData ? userData.username : 'Colega'}!
                         </Typography>
                       </Stack>
                       <Typography variant="subtitle2">Projeto Ecoponto</Typography>

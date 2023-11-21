@@ -34,7 +34,8 @@ import AnimateButton from '../../../components/extended/AnimateButton';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
+import { useUser } from '../../../hooks/UserContext';
+import { useNavigate } from 'react-router-dom';
 import Google from '../../../assets/images/icons/social-google.svg';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
@@ -42,9 +43,11 @@ import Google from '../../../assets/images/icons/social-google.svg';
 const FirebaseLogin = ({ ...others }) => {
   const theme = useTheme();
   const scriptedRef = useScriptRef();
+  const { setUser } = useUser();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
+  const navigate = useNavigate();
 
   const googleHandler = async () => {
     console.error('Login');
@@ -174,6 +177,8 @@ const FirebaseLogin = ({ ...others }) => {
               if (response.ok) {
                 console.log(data.token);
                 setStatus({ success: true });
+                setUser(data)
+                navigate('/');
               } else {
                 setStatus({ success: false });
                 setErrors({ submit: data.message || 'Login failed' });
