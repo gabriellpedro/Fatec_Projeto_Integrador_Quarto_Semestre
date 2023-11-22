@@ -15,6 +15,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import themes from './themes';
 import React from 'react';
 import { UserProvider } from './hooks/UserContext';
+import { ToastProvider } from 'react-toast-notifications';
 // import Login from './pages/authentication/authentication/Login'
 // import Register from './pages/authentication/authentication/Register'
 
@@ -51,22 +52,25 @@ import { useSelector } from 'react-redux';
   //     </StyledEngineProvider>
   //   );
   // };
-
+  import CheckUserAuthentication from './components/CheckAuthentication'
 const App = () => {
   const customization = useSelector((state) => state.customization);
 
   return (
-    <UserProvider>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={themes(customization)}>
-          <CssBaseline />
-          <NavigationScroll>
-            <Routes />
-          </NavigationScroll>
-          <Footer />
-        </ThemeProvider>
-      </StyledEngineProvider>
-    </UserProvider>
+    <ToastProvider>
+      <UserProvider>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={themes(customization)}>
+            <CssBaseline />
+            <NavigationScroll>
+              <CheckUserAuthentication/>
+              <Routes />
+            </NavigationScroll>
+            <Footer />
+          </ThemeProvider>
+        </StyledEngineProvider>
+      </UserProvider>
+    </ToastProvider>
   );
 };
 
