@@ -35,18 +35,18 @@ import MainCard from '../../../../components/cards/MainCard';
 import Transitions from '../../../../components/extended/Transitions';
 import UpgradePlanCard from './UpgradePlanCard';
 import User1 from '../../../../assets/images/users/user.svg';
-import { useUser } from '../../../../hooks/UserContext';
 
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-react';
-
+import { useUser } from '../../../../hooks/UserContext';
+import useScriptRef from '../../../../hooks/useScriptRef';
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
-  const { userData } = useUser();
+  const { userData, logout } = useUser();
 
   const [sdm, setSdm] = useState(true);
   const [value, setValue] = useState('');
@@ -57,8 +57,31 @@ const ProfileSection = () => {
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
   const anchorRef = useRef(null);
+  const scriptedRef = useScriptRef();
   const handleLogout = async () => {
-    console.log('Logout');
+    try {
+      const response = await fetch('http://localhost:8000/materials/logout/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (scriptedRef.current) {
+        if (response.ok) {
+          logout();
+          localStorage.setItem('notification', JSON.stringify({ message: 'Logout Realizado com Sucesso!', type: 'success' }));
+          navigate('/');
+        } else {
+          localStorage.setItem('notification', JSON.stringify({ message: 'Logout não foi realizado', type: 'failed' }));
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      if (scriptedRef.current) {
+        localStorage.setItem('notification', JSON.stringify({ message: 'Logout não foi realizado', type: 'failed' }));
+      }
+    }
   };
 
   const handleClose = (event) => {
@@ -88,6 +111,7 @@ const ProfileSection = () => {
 
     prevOpen.current = open;
   }, [open]);
+
 
   return (
     <>
