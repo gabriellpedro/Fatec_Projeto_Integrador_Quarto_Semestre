@@ -27,6 +27,7 @@
   height: 350px;
   margin: 20px;
   box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  line-height: 1;
 }
 .materialOccurrence:hover {
   box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.5);
