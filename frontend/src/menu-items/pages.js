@@ -77,6 +77,13 @@ const pages = {
           type: 'item',
           url: '/balance/',
           target: false
+        },
+        {
+          id: 'clientsearch',
+          title: 'Busca de Usuário',
+          type: 'item',
+          url: '/usersearch/',
+          target: false
         }
       ]
     }

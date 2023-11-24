@@ -188,6 +188,7 @@ class UserSearch(APIView):
     """
     def get(self, request):
         email = request.GET.get('email')
+        print(f'Yes, this is the email: {email}')
         if email:
             object_ = UserStorage(email)
             possible_user = object_.get_by_email(email)
@@ -326,7 +327,7 @@ class UserControlView(APIView):
         users amount
     """
     def get(self, request):
-        user_id = request.POST.get('user_id_occurrence')
+        user_id = request.GET.get('user_id_occurrence')
         errors = {'errors': list()}
         if not user_id:
             errors['errors'].append('Necessário enviar um Usuário Válido')
