@@ -126,8 +126,7 @@ class RegisterUser(APIView):
         return Response(usernames)
 
     def post(self, request, format=None):
-        post_data = request.POST.copy()
-        user_form = UserForm(post_data)
+        user_form = UserForm(request.data)
         if user_form.is_valid():
             context = {'user_form': user_form}
             if user_form.clean_password() == user_form.clean_confirm_password():
@@ -139,9 +138,9 @@ class RegisterUser(APIView):
                     user_registration.save()
                     return Response([{'errors': 'None'}])
             else:
-                return Response([{'errors': 'Senhas não coincidem'}])
+                return Response([{'errors': 'Senhas não coincidem'}], status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response([{'errors': user_form.errors}])
+            return Response([{'errors': user_form.errors}], status=status.HTTP_400_BAD_REQUEST)
 
 class AuthLoginView(APIView):
     """
