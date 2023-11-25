@@ -2,12 +2,14 @@
 import { IconKey } from '@tabler/icons-react';
 import { IconChartArrowsVertical } from '@tabler/icons-react';
 import { IconScale } from '@tabler/icons-react';
+import { IconInfoCircle } from '@tabler/icons-react';
 
 // constant
 const icons = {
   IconKey,
   IconChartArrowsVertical,
   IconScale,
+  IconInfoCircle, 
 };
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
@@ -86,6 +88,13 @@ const pages = {
           target: false
         }
       ]
+    }, 
+    {
+      id: 'about',
+      title: 'Sobre Nós',
+      type: 'item',
+      icon: icons.IconInfoCircle,
+      url: '/about/',
     }
   ]
 };
