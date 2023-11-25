@@ -1,5 +1,5 @@
 import GenericProduct from "../assets/images/icons/generic_product.avif"
-import { React } from 'react';
+import { React, useState } from 'react';
 import {
     MDBCard,
     MDBCardBody,
@@ -10,14 +10,14 @@ import {
 
 function BalanceOccurrenceSmall({ name, mesure, price, mesure_unity }) {
     return (
-        <MDBCard className="mb-3" style={{ backgroundColor: '#ff5766' }}>
+        <MDBCard className="mb-2" style={{ backgroundColor: '#20B2AA', pointerEvents: 'auto' }}>
             <MDBCardBody>
             <div className="d-flex justify-content-between">
                 <div className="d-flex flex-row align-items-center">
                 <div>
                     <MDBCardImage
                     src={GenericProduct}
-                    fluid className="rounded-3" style={{ width: "100px" }}
+                    fluid className="rounded-3" style={{ width: "70px" }}
                     alt="Balance Item" />
                 </div>
                 <div className="ms-3">

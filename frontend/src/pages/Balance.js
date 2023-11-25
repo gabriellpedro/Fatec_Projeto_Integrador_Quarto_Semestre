@@ -20,6 +20,7 @@ import {
   import SearchMaterial from '../layout/MainLayout/Header/SearchSection/SearchMaterial';
   // import * as BackRequests from '../hooks/BackRequests';
   import HandleMaterials from '../hooks/BackRequests';
+  import HandleUserBalance from '../hooks/BackRequestUserBalance';
   import { useNavigate } from 'react-router-dom';
 
 
@@ -28,6 +29,7 @@ function Balance() {
   const [materialComponents, setMaterialComponents] = useState([]);
   const [searchResult, setSearchResult] = useState(null);
   const [isComponentMounted, setIsComponentMounted] = useState(false);
+  const [operationsBalance, setoperationsBalance] = useState([]);
   const storedUserOperations = localStorage.getItem('selecteduser');
   const profileStoredUserOperations = localStorage.getItem('profileseleteduser');
   const storedUserOperationsBalance = localStorage.getItem('selecteduserbalance');
@@ -35,7 +37,8 @@ function Balance() {
 
   var foundUserOperations = [];
   var foundProfileUserOperations = [];
-  var foundUserOperationsBalance = {};
+  var foundUserOperationsBalance = [];
+
   try{
     if (storedUserOperations && profileStoredUserOperations) {
         foundUserOperations = JSON.parse(storedUserOperations);
@@ -49,33 +52,15 @@ function Balance() {
       };
   } catch(error){
     console.error('Error parsing storedUserOperations:', error);
-  }
+  };
 
   try{
     if (storedUserOperationsBalance) {
         foundUserOperationsBalance = JSON.parse(storedUserOperationsBalance);
-
-        console.log('STORAGED BALANCE', foundProfileUserOperations )
-        if (foundUserOperationsBalance.length > 0){
-          foundUserOperationsBalance = founfoundUserOperationsBalancedUserOperations[0];
-          if (foundUserOperationsBalance.recicle_balance_array.length > 0){
-            const alreadyBalance = response.data.map((balanceOccurrence, key) => (
-              <UserOccurrenceObj
-                key={key}
-                name={balanceOccurrence.name}
-                user_id={balanceOccurrence.id}
-                email={balanceOccurrence.email}
-                is_active={balanceOccurrence.is_active}
-                onUserOccurrenceClick={() => handleUserOccurrenceClick(UserOccurrence.name)}
-              />
-      
-            ));
-          }
-        }
+      }
+    } catch(error){
+        console.error('Error parsing storedUserOperations:', error);
       };
-  } catch(error){
-    console.error('Error parsing storedUserOperations:', error);
-  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,13 +68,15 @@ function Balance() {
         // Call HandleMaterials on the initial render
         setIsComponentMounted(true);
         await HandleMaterials({ setMaterialComponents, value: ''});
+        await HandleUserBalance(setoperationsBalance);
       } else if (searchResult !== null) {
         await HandleMaterials({ setMaterialComponents, value: searchResult });
+        await HandleUserBalance(setoperationsBalance);
       }
     };
 
     fetchData();
-  }, [isComponentMounted, searchResult]);
+  }, [isComponentMounted, searchResult, setoperationsBalance]);
 
   console.log('searchResult', searchResult)
   const updateSearchResult = (result) => {
@@ -123,7 +110,7 @@ function Balance() {
                   <div className="d-flex justify-content-between align-items-center mb-4">
                     <div>
                       <p className="mb-1">Balança atual, usuário {foundProfileUserOperations.name ? foundProfileUserOperations.name : "Indefinido"}</p>
-                      <p className="mb-0">Há x items na balança desse cliente</p>
+                      <p className="mb-0">Há {operationsBalance.length} item{operationsBalance.length > 1 ? "s" : ""} na balança desse cliente</p>
                     </div>
                     <div>
                       <p>
@@ -153,7 +140,8 @@ function Balance() {
                       <p className="small">Items pesados: </p>
 
                       <MDBCol lg="12" style={{ overflowY: 'auto', maxHeight: '200px' }}>
-                          <BalanceOccurrenceSmall 
+                          {operationsBalance.length > 0 ? operationsBalance : "Usuário não possui lista ativa" }
+                          {/* <BalanceOccurrenceSmall 
                           name="Material Reciclável"
                           mesure="2"
                           price="9"
@@ -182,7 +170,7 @@ function Balance() {
                           mesure="2"
                           price="9"
                           mesure_unity="KG"
-                        />
+                        /> */}
                         <a href="#!" type="submit" className="text-white">
                           <MDBIcon fab icon="cc-mastercard fa-2x me-2" />
                         </a>
@@ -200,17 +188,17 @@ function Balance() {
   
                       <div className="d-flex justify-content-between">
                         <p className="mb-2">Subtotal</p>
-                        <p className="mb-2">R$ 180.00</p>
+                        <p className="mb-2">R$ {foundUserOperationsBalance.length > 0 ? foundUserOperationsBalance[0].final_value : 0}</p>
                       </div>
   
                       <div className="d-flex justify-content-between">
                         <p className="mb-2">Impostos </p>
-                        <p className="mb-2">- R$ 20.00</p>
+                        <p className="mb-2">- R$ 0</p>
                       </div>
   
                       <div className="d-flex justify-content-between">
                         <p className="mb-2">Total</p>
-                        <p className="mb-2">R$ 160.00</p>
+                        <p className="mb-2">R$ {foundUserOperationsBalance.length > 0 ? foundUserOperationsBalance[0].final_value : 0}</p>
                       </div>
   
                       <MDBBtn color="info" block size="lg">
