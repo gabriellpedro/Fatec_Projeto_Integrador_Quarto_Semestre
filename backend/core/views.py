@@ -339,3 +339,28 @@ class UserControlView(APIView):
             return Response([possible_user])
         else:
             return Response([{'errors': 'Usuário não encontrado ou não possui nenhuma operação'}])
+
+class UserStaffCheck(APIView):
+    """
+        Class used to return if a
+        user is indeed staff
+    """
+    def get(self, request):
+        user_id = request.GET.get('user_id_occurrence')
+        token = request.GET.get('token')
+        if user_id or token:
+            object_user = UserStorage()
+            if token:
+                possible_user = object_user.get_by_token(token)
+                if possible_user:
+                    return Response([possible_user])
+                else:
+                    return Response([{'errors': 'Usuário não localizado'}])
+            elif user_id:
+                possible_user = object_user.get_by_id(user_id)
+                if possible_user:
+                    return Response([possible_user])
+                else:
+                    return Response([{'errors': 'Usuário não localizado'}])
+        else:
+            return Response([{'errors': 'Necessário um token'}])
