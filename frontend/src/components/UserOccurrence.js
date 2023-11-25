@@ -27,24 +27,29 @@ function BalanceOccurrence({  name, user_id, email, is_active, onUserOccurrenceC
         })
         .then(response => {
             console.log(response)
-            if (response.status === 200) {
-                localStorage.setItem('selecteduser', JSON.parse(response.data));
-                onUserOccurrenceClick(name);
+            try{
+                if (response.status === 200) {
+                    localStorage.setItem('selecteduser', JSON.stringify(response.data));
+                    onUserOccurrenceClick(name);
+                }
+            } catch(error){
+                console.log('JSON PARSE', error)
+            }
         }
-        })};
+        )};
 
     return (
         <button
         type="button"
         className="btn"
         style={{
-          textDecoration: 'none',
-          padding: 0,
-          border: 'none',
-          background: 'none',
-          color: 'inherit',
-          textAlign: 'left',
-          width: '100%'
+            textDecoration: 'none',
+            padding: 0,
+            border: 'none',
+            background: 'none',
+            color: 'inherit',
+            textAlign: 'left',
+            width: '100%'
         }}
         onClick={handleUserOperation}>
         <MDBCard className="mb-3">
@@ -81,7 +86,7 @@ function BalanceOccurrence({  name, user_id, email, is_active, onUserOccurrenceC
                 </div>
             </div>
             </MDBCardBody>
-      </MDBCard>
+        </MDBCard>
     </button>
     )
 

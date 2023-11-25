@@ -8,6 +8,9 @@ import { React } from 'react';
 export function HandleUserSearch({setUserOccurrence, handleUserOccurrenceClick, value=''}) {
     const values = value ? { email: value } : {};
     console.log("Values", values)
+    
+    localStorage.removeItem('selecteduser');
+    localStorage.removeItem('profileseleteduser');
     const URL = 'http://localhost:8000/materials/user_search/';
     axios.get(URL,{
       headers: {
@@ -29,6 +32,7 @@ export function HandleUserSearch({setUserOccurrence, handleUserOccurrenceClick, 
             />
     
           ));
+          localStorage.setItem('profileseleteduser', JSON.stringify(response.data));
           setUserOccurrence(components);
       };
       })

@@ -1,16 +1,48 @@
 import React from 'react';
 import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBBtn, MDBTypography, MDBIcon } from 'mdb-react-ui-kit';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function ProfileStatistics() {
     var number = Math.floor(Math.random() * (6 - 1 + 1)) + 1; 
     const avatar = `https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava${number}-bg.webp`
     const storedUserOperations = localStorage.getItem('selecteduser');
+    const profileStoredUserOperations = localStorage.getItem('profileseleteduser');
+    const navigate = useNavigate();
+
     console.log('STORAGED', storedUserOperations)
     var foundUserOperations = [];
-    if (storedUserOperations) {
-        foundUserOperations = JSON.parse(storedUserOperations);
-        console.log('STORAGED', foundUserOperations[0].current_total )
-      }
+    var foundProfileUserOperations = [];
+    try{
+      if (storedUserOperations && profileStoredUserOperations) {
+          foundUserOperations = JSON.parse(storedUserOperations);
+          foundProfileUserOperations = JSON.parse(profileStoredUserOperations);
+          console.log('STORAGED', foundUserOperations[0].current_total )
+          console.log('STORAGED PROFILE', foundProfileUserOperations )
+        }
+    } catch(error){
+      console.error('Error parsing storedUserOperations:', error);
+    }
+
+    const handleSelectButtonClick = () => {
+      const values = { user_id_occurrence: foundProfileUserOperations.length > 0 ? foundProfileUserOperations[0].id  : 0 };
+      console.log("Values", values)
+      
+      localStorage.removeItem('selecteduserbalance');
+      const URL = 'http://localhost:8000/materials/recycle_balance/';
+      axios.get(URL,{
+        headers: {
+          'content-type': 'application/json',
+        },
+        params: values,
+      })
+        .then(response => {localStorage.setItem('selecteduserbalance', JSON.stringify(response.data))})
+        .catch(error => {
+          console.error('Error fetching user balance:', error);
+          throw error;
+        });
+        navigate("/balance/");
+    };
 
   return (
     <div className="vh-80" style={{ backgroundColor: '#eee' }}>
@@ -23,9 +55,9 @@ export default function ProfileStatistics() {
                   <MDBCardImage src={avatar}
                     className="rounded-circle" fluid style={{ width: '100px' }} />
                 </div>
-                <MDBTypography tag="h4">Ecofriend</MDBTypography>
+                <MDBTypography tag="h4">{foundProfileUserOperations.length > 0 ? foundProfileUserOperations[0].name : "Ecofriend"}</MDBTypography>
                 <MDBCardText className="text-muted mb-4">
-                  @EcoFriend <span className="mx-2">|</span> <a href="#!">ecofriend.com</a>
+                  @{foundProfileUserOperations.length > 0 ? foundProfileUserOperations[0].name : "Ecofriend"} <span className="mx-2">|</span> <a href="#!">{foundProfileUserOperations.length > 0 ? foundProfileUserOperations[0].email : "ecofriend.com"}</a>
                 </MDBCardText>
                 <div className="mb-4 pb-2">
                   <MDBBtn outline floating>
@@ -38,7 +70,7 @@ export default function ProfileStatistics() {
                     <MDBIcon fab icon="skype" size="lg" />
                   </MDBBtn>
                 </div>
-                <MDBBtn rounded size="lg">
+                <MDBBtn rounded size="lg" onClick={handleSelectButtonClick}>
                   Selecionar
                 </MDBBtn>
                 <div className="d-flex justify-content-between text-center mt-5 mb-2">

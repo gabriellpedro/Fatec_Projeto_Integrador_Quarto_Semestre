@@ -20,15 +20,18 @@ import {
   import ProfileStatistics from '../components/UserSearchProfile'
 
 
-function Balance() {
 
+function Balance() {
+  
   const [userOccurrence, setUserOccurrence] = useState([]);
   const [searchResult, setSearchResult] = useState(null);
   const [isComponentMounted, setIsComponentMounted] = useState(false);
+  const [refreshCounter, setRefreshCounter] = useState(0);
 
   const handleUserOccurrenceClick = (user) => {
     // Handle the click event and state change here
     console.log('User occurrence clicked:', user);
+    setRefreshCounter((prevCounter) => prevCounter + 1);
   };
 
 
@@ -39,7 +42,7 @@ function Balance() {
         setIsComponentMounted(true);
         await HandleUserSearch({ setUserOccurrence, handleUserOccurrenceClick, value: ''});
       } else if (searchResult !== null) {
-        await HandleUserSearch({ setUserOccurrence, handleUserOccurrenceClick,value: searchResult });
+        await HandleUserSearch({ setUserOccurrence, handleUserOccurrenceClick, value: searchResult });
       }
     };
 
@@ -51,7 +54,6 @@ function Balance() {
     setSearchResult(result);
   }
 
-  const [refreshCounter, setRefreshCounter] = useState(0);
 
   const handleRefresh = () => {
     // Increment the counter to trigger a re-render in ChildComponent
