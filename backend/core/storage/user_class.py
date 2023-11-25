@@ -1,3 +1,4 @@
+from rest_framework.authtoken.models import Token
 from core.models import UserControl
 from core.models import User
 from datetime import datetime
@@ -37,6 +38,19 @@ class UserStorage(object):
         if not self.email:
             raise ValueError('Need to pass a valid email')
         self.user_occurrence = User.objects.filter(email=self.email)
+        return self.__clean_user_occurrence(self.user_occurrence)
+
+    def get_by_token(self, token: str or None=None) -> dict or None:
+        if token:
+            self.token = token
+        if not self.token:
+            raise ValueError('Need to pass a valid token')
+        try:
+            self.user_occurrence = Token.objects.get(key=self.token)
+            if self.user_occurrence:
+                self.user_occurrence = [self.user_occurrence.user]
+        except Token.DoesNotExist:
+            return
         return self.__clean_user_occurrence(self.user_occurrence)
 
     def get_by_id(self, user_id: int or None):

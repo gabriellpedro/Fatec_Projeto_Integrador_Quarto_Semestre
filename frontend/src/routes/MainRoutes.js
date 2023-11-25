@@ -12,6 +12,7 @@ const RecycleStatisticsLoad = Loadable(lazy(() => import('../pages/RecycleStatis
 const CitiesStatisticsLoad = Loadable(lazy(() => import('../pages/CitiesStatistics')));
 const HomeLoad = Loadable(lazy(() => import('../pages/Home')));
 const BalanceLoad = Loadable(lazy(() => import('../pages/Balance')));
+const UserSearchLoad = Loadable(lazy(() => import('../pages/UserBalanceSearch')));
 
 
 // sample page routing
@@ -59,6 +60,10 @@ const MainRoutes = {
     {
       path: 'balance',
       element: <BalanceLoad />,
+    },
+    {
+      path: 'usersearch',
+      element: <UserSearchLoad />,
     },
     ]
   }

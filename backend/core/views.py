@@ -188,6 +188,7 @@ class UserSearch(APIView):
     """
     def get(self, request):
         email = request.GET.get('email')
+        print(f'Yes, this is the email: {email}')
         if email:
             object_ = UserStorage(email)
             possible_user = object_.get_by_email(email)
@@ -326,7 +327,7 @@ class UserControlView(APIView):
         users amount
     """
     def get(self, request):
-        user_id = request.POST.get('user_id_occurrence')
+        user_id = request.GET.get('user_id_occurrence')
         errors = {'errors': list()}
         if not user_id:
             errors['errors'].append('Necessário enviar um Usuário Válido')
@@ -338,3 +339,28 @@ class UserControlView(APIView):
             return Response([possible_user])
         else:
             return Response([{'errors': 'Usuário não encontrado ou não possui nenhuma operação'}])
+
+class UserStaffCheck(APIView):
+    """
+        Class used to return if a
+        user is indeed staff
+    """
+    def get(self, request):
+        user_id = request.GET.get('user_id_occurrence')
+        token = request.GET.get('token')
+        if user_id or token:
+            object_user = UserStorage()
+            if token:
+                possible_user = object_user.get_by_token(token)
+                if possible_user:
+                    return Response([possible_user])
+                else:
+                    return Response([{'errors': 'Usuário não localizado'}])
+            elif user_id:
+                possible_user = object_user.get_by_id(user_id)
+                if possible_user:
+                    return Response([possible_user])
+                else:
+                    return Response([{'errors': 'Usuário não localizado'}])
+        else:
+            return Response([{'errors': 'Necessário um token'}])

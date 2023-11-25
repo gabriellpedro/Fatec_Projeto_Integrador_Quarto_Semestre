@@ -13,6 +13,7 @@ urlpatterns = [
     path('recycle_balance/close', OperationsBalanceView.as_view(), name='recycle_balance_close'),
     path('operation/', UserControlView.as_view(), name='operation_get'),
     path('register/', RegisterUser.as_view(), name='register'),
+    path('staff/', UserStaffCheck.as_view(), name='staff'),
     path('login/', AuthLoginView.as_view(), name='login'),
     path('logout/', AuthLogoutView.as_view(), name='logout'),
 ]

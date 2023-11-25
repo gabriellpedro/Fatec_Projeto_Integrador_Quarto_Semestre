@@ -20,6 +20,7 @@ import {
   import SearchMaterial from '../layout/MainLayout/Header/SearchSection/SearchMaterial';
   // import * as BackRequests from '../hooks/BackRequests';
   import HandleMaterials from '../hooks/BackRequests';
+  import { useNavigate } from 'react-router-dom';
 
 
 function Balance() {
@@ -27,6 +28,54 @@ function Balance() {
   const [materialComponents, setMaterialComponents] = useState([]);
   const [searchResult, setSearchResult] = useState(null);
   const [isComponentMounted, setIsComponentMounted] = useState(false);
+  const storedUserOperations = localStorage.getItem('selecteduser');
+  const profileStoredUserOperations = localStorage.getItem('profileseleteduser');
+  const storedUserOperationsBalance = localStorage.getItem('selecteduserbalance');
+  const navigate = useNavigate();
+
+  var foundUserOperations = [];
+  var foundProfileUserOperations = [];
+  var foundUserOperationsBalance = {};
+  try{
+    if (storedUserOperations && profileStoredUserOperations) {
+        foundUserOperations = JSON.parse(storedUserOperations);
+        foundProfileUserOperations = JSON.parse(profileStoredUserOperations);
+        console.log('STORAGED', foundUserOperations[0].current_total )
+        console.log('STORAGED PROFILE', foundProfileUserOperations )
+        if (foundUserOperations.length > 0 && foundProfileUserOperations.length > 0){
+          foundUserOperations = foundUserOperations[0];
+          foundProfileUserOperations = foundProfileUserOperations[0];
+        }
+      };
+  } catch(error){
+    console.error('Error parsing storedUserOperations:', error);
+  }
+
+  try{
+    if (storedUserOperationsBalance) {
+        foundUserOperationsBalance = JSON.parse(storedUserOperationsBalance);
+
+        console.log('STORAGED BALANCE', foundProfileUserOperations )
+        if (foundUserOperationsBalance.length > 0){
+          foundUserOperationsBalance = founfoundUserOperationsBalancedUserOperations[0];
+          if (foundUserOperationsBalance.recicle_balance_array.length > 0){
+            const alreadyBalance = response.data.map((balanceOccurrence, key) => (
+              <UserOccurrenceObj
+                key={key}
+                name={balanceOccurrence.name}
+                user_id={balanceOccurrence.id}
+                email={balanceOccurrence.email}
+                is_active={balanceOccurrence.is_active}
+                onUserOccurrenceClick={() => handleUserOccurrenceClick(UserOccurrence.name)}
+              />
+      
+            ));
+          }
+        }
+      };
+  } catch(error){
+    console.error('Error parsing storedUserOperations:', error);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,34 +95,10 @@ function Balance() {
   const updateSearchResult = (result) => {
     setSearchResult(result);
   }
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const res = await BackRequests.getSpecificMaterials(result);
-  
-  
-  //         if (res) {
-  //           const components = res.map((materialOccurrence, key) => (
-  //             <BalanceOccurrence
-  //               key={key}
-  //               name={materialOccurrence.name}
-  //               price={materialOccurrence.price}
-  //               mesure="0"
-  //               mesure_unity={materialOccurrence.mesure_unity}
-  //             />
-  
-  //           ));
-  //           console.log('Material components:', components); 
-  //           setMaterialComponents(components);
-  //         }
-  //       } catch (error) {
-  //         console.error('Error fetching materials:', error);
-  //       }
-  //     };
-  
-  //     fetchData(); // Call the function to fetch data when the component mounts
-  //   }, []); // Empty dependency array ensures this effect runs once on mount
-  // };
+
+  const HandleClick = () =>{
+    navigate("/usersearch/");
+  }
 
   return (
   <section className="h-85 h-custom" style={{ backgroundColor: "#eee" }}>
@@ -84,17 +109,20 @@ function Balance() {
             <MDBCardBody className="p-2">
               <MDBRow>
                 <MDBCol lg="7" style={{ overflowY: 'auto', maxHeight: '500px' }}>
-                  <MDBTypography tag="h5">
+                  <MDBTypography tag="h5" className="d-flex align-items-center">
                     {/* <a href="#!" className="text-body">
                       <MDBIcon fas icon="long-arrow-alt-left me-2" /> Continue
                       shopping
                     </a> */}
                     <SearchMaterial onUpdateValue={updateSearchResult}/>
+                    <MDBBtn color="info" block size="lg" className="ms-5" onClick={HandleClick}>
+                        Alterar Usuário
+                    </MDBBtn>
                   </MDBTypography>
                   <hr />
                   <div className="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                      <p className="mb-1">Balança atual</p>
+                      <p className="mb-1">Balança atual, usuário {foundProfileUserOperations.name ? foundProfileUserOperations.name : "Indefinido"}</p>
                       <p className="mb-0">Há x items na balança desse cliente</p>
                     </div>
                     <div>
