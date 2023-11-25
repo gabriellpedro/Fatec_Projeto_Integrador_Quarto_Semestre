@@ -1,5 +1,6 @@
 import GenericProduct from "../assets/images/icons/generic_product.avif"
-import { React } from 'react';
+import { React, useState } from 'react';
+import MesureModal from "../components/ModalAddMesure"
 import {
     MDBCard,
     MDBCardBody,
@@ -9,8 +10,14 @@ import {
     } from "mdb-react-ui-kit";
 
 function BalanceOccurrence({ name, mesure, price, mesure_unity }) {
+    const [open, setOpen] = useState(false);
+        const handleOpen = () => {
+            setOpen(true);
+        };
+        
+    
     return (
-        <MDBCard className="mb-3">
+        <MDBCard className="mb-3" style={{ pointerEvents: 'auto', cursor: 'pointer' }} onClick={handleOpen}>
             <MDBCardBody>
             <div className="d-flex justify-content-between">
                 <div className="d-flex flex-row align-items-center">
@@ -44,7 +51,8 @@ function BalanceOccurrence({ name, mesure, price, mesure_unity }) {
                 </div>
             </div>
             </MDBCardBody>
-      </MDBCard>
+        <MesureModal setOpen={setOpen} open={open}/>
+    </MDBCard>
 
     )
 

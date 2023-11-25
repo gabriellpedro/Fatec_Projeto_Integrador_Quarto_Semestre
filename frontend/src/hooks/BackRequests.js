@@ -5,11 +5,11 @@ import axios from 'axios';
 import { React } from 'react';
 
 
-export function HandleMaterials({setMaterialComponents, value='pressor'}) {
+export async function HandleMaterials({setMaterialComponents, value='pressor'}) {
   const values = value ? { material_search: value } : {};
   console.log("Values", values)
   const URL = 'http://localhost:8000/materials/getmaterials/';
-  axios.get(URL,{
+  await axios.get(URL,{
     headers: {
       'content-type': 'application/json',
     },
