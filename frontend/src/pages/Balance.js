@@ -33,6 +33,7 @@ function Balance() {
   const storedUserOperations = localStorage.getItem('selecteduser');
   const profileStoredUserOperations = localStorage.getItem('profileseleteduser');
   const storedUserOperationsBalance = localStorage.getItem('selecteduserbalance');
+  const [refreshBalance, setrefreshBalance] = useState(false);
   const navigate = useNavigate();
 
   var foundUserOperations = [];
@@ -63,20 +64,30 @@ function Balance() {
       };
 
   useEffect(() => {
+
+    const RefreshBalance = () =>{
+      if(refreshBalance){
+        setrefreshBalance(false)
+      } else {
+        setrefreshBalance(true)
+      }
+      fetchData();
+    }
+
     const fetchData = async () => {
       if (!isComponentMounted) {
         // Call HandleMaterials on the initial render
         setIsComponentMounted(true);
-        await HandleMaterials({ setMaterialComponents, value: ''});
+        await HandleMaterials({RefreshBalance,  setMaterialComponents, value: ''});
         await HandleUserBalance(setoperationsBalance);
       } else if (searchResult !== null) {
-        await HandleMaterials({ setMaterialComponents, value: searchResult });
+        await HandleMaterials({ RefreshBalance, setMaterialComponents, value: searchResult });
         await HandleUserBalance(setoperationsBalance);
       }
     };
 
     fetchData();
-  }, [isComponentMounted, searchResult, setoperationsBalance]);
+  }, [isComponentMounted, searchResult, setoperationsBalance, refreshBalance]);
 
   console.log('searchResult', searchResult)
   const updateSearchResult = (result) => {
@@ -185,12 +196,17 @@ function Balance() {
                         </a>
                       </MDBCol>
                       <hr />
-  
+
+                      <div className="d-flex justify-content-between">
+                        <p className="mb-2">Quantidade de Materiais</p>
+                        <p className="mb-2">{operationsBalance.length}</p>
+                      </div>
+
                       <div className="d-flex justify-content-between">
                         <p className="mb-2">Subtotal</p>
                         <p className="mb-2">R$ {foundUserOperationsBalance.length > 0 ? foundUserOperationsBalance[0].final_value : 0}</p>
                       </div>
-  
+
                       <div className="d-flex justify-content-between">
                         <p className="mb-2">Impostos </p>
                         <p className="mb-2">- R$ 0</p>

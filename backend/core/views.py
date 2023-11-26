@@ -206,9 +206,9 @@ class RecycleBalanceView(APIView):
         operation, linking a user to a sell occurrence
     """
     def post(self, request):
-        user_id = request.POST.get('user_id_occurrence')
-        material_id = request.POST.get('material_id')
-        mesure = request.POST.get('mesure')
+        user_id = request.data.get('user_id_occurrence')
+        material_id = request.data.get('material_id')
+        mesure = request.data.get('mesure')
         errors = {'errors': list()}
         if not user_id:
             errors['errors'].append('Necessário enviar um Usuário Válido')
@@ -216,6 +216,8 @@ class RecycleBalanceView(APIView):
             errors['errors'].append('Necessário enviar um Material Válido')
         if not mesure:
             errors['errors'].append('Necessário enviar uma Medida Válido')
+        if len(errors['errors']) > 0:
+           return Response([errors])
         object_ = UserStorage()
         object_material = Materials()
         possible_user = object_.get_by_id(user_id)

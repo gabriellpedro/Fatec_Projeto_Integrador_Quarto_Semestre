@@ -14,6 +14,7 @@ class UserStorage(object):
         super(UserStorage, self).__init__()
         self.__user = None
         self.email = email
+        self.user_id = None
 
     # def __clean_user_occurrence(self, user_occurrence) -> dict:
     #     user_occurrence = user_occurrence.__dict__
