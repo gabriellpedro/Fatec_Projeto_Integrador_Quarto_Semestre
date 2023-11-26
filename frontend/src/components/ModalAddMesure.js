@@ -32,26 +32,35 @@ export default function MesureModal({open, setOpen}) {
     };
     return (
     <div>
-        <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-material"
-            aria-describedby="modal-modal-description"
-        >
-            <Box sx={style}>
-            <Typography id="modal-modal-material" variant="h6" component="h2">
-                Adição de material : Material
-                Usuário: Usuário
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Quantidade: 
-                Unidade de Medida:
-            </Typography>
-            <MDBBtn color="info" block size="sl" className="ms-11" onClick={handleClose}>
-                        Cancelar
-            </MDBBtn>
-            </Box>
-        </Modal>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-material"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                <Typography variant="h4" component="h2" gutterBottom>
+                            Adição de material: {name}
+                </Typography>
+                <TextField
+                    label="Quantidade"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                />
+                <Typography variant="body2" color="error" gutterBottom>
+                    Lembre-se que a unidade de medida desse produto é {mesure_unity}
+                </Typography>
+                <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+                    <MDBBtn color="danger" size="sl" className="ms-11" onClick={(event) => handleClose(event)}>
+                                Cancelar
+                    </MDBBtn>
+                    <MDBBtn color="success" size="sl" className="ms-11" onClick={(event) => handleClose(event)}>
+                                Adicionar
+                    </MDBBtn>
+                </div>
+                </Box>
+            </Modal>
         </div>
     );
 }

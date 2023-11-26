@@ -5,7 +5,7 @@ import axios from 'axios';
 import { React } from 'react';
 
 
-export async function HandleMaterials({setMaterialComponents, value='pressor'}) {
+export async function HandleMaterials({RefreshBalance, setMaterialComponents, value='pressor'}) {
   const values = value ? { material_search: value } : {};
   console.log("Values", values)
   const URL = 'http://localhost:8000/materials/getmaterials/';
@@ -21,10 +21,12 @@ export async function HandleMaterials({setMaterialComponents, value='pressor'}) 
         const components = response.data.map((materialOccurrence, key) => (
           <BalanceOccurrence
             key={key}
+            id={materialOccurrence.id}
             name={materialOccurrence.name}
             price={materialOccurrence.price}
             mesure="0"
             mesure_unity={materialOccurrence.mesure_unity}
+            RefreshBalance={RefreshBalance}
           />
   
         ));

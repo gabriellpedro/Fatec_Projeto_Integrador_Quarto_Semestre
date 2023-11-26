@@ -15,7 +15,6 @@ async function HandleUserBalance(setoperationsBalance) {
           if (foundUserOperationsBalance.length > 0){
             foundUserOperationsBalance = foundUserOperationsBalance[0];
             if (foundUserOperationsBalance.recicle_balance_array.length > 0){
-              console.log('SIMMMMMMMMMMMMMMMMMMMMMMMMMMMM')
               console.log(foundUserOperationsBalance.recicle_balance_array[0].mesure)
               const operationsBalance = foundUserOperationsBalance.recicle_balance_array.map((balanceOccurrence, key) => (
                 <BalanceOccurrenceSmall
