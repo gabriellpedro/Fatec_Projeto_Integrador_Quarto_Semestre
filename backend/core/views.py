@@ -295,7 +295,7 @@ class OperationsBalanceView(APIView):
         balance occurrences
     """
     def post(self, request):
-        user_id = request.POST.get('user_id_occurrence')
+        user_id = request.data.get('user_id_occurrence')
         errors = {'errors': list()}
         if not user_id:
             errors['errors'].append('Necessário enviar um Usuário Válido')

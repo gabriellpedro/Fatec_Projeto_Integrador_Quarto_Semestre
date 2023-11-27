@@ -23,7 +23,9 @@ class RecycleBalanceStorage(object):
                     occurrence = occurrence.__dict__
                     _ = occurrence.pop('_state')
                     material_occurrence = self.materials.get_by_id(occurrence['material_id'])
+                    _ = material_occurrence.pop('id')
                     final_mesure += material_occurrence['price'] * occurrence['mesure']
+                    occurrence.update(material_occurrence)
                     temp_list.append(occurrence)
             return {'recicle_balance_array': temp_list,
                     'final_value': final_mesure,
