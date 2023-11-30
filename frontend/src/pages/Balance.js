@@ -21,8 +21,11 @@ import {
   // import * as BackRequests from '../hooks/BackRequests';
   import HandleMaterials from '../hooks/BackRequests';
   import HandleUserBalance from '../hooks/BackRequestUserBalance';
+  import HandleBalanceClose from "../hooks/CloseBalanceOccurrence"
+  import Typography from '@mui/material/Typography';
   import { useNavigate } from 'react-router-dom';
-
+  import Modal from '@mui/material/Modal';
+  import Box from '@mui/material/Box';
 
 function Balance() {
 
@@ -34,7 +37,20 @@ function Balance() {
   const profileStoredUserOperations = localStorage.getItem('profileseleteduser');
   const storedUserOperationsBalance = localStorage.getItem('selecteduserbalance');
   const [refreshBalance, setrefreshBalance] = useState(false);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
   var foundUserOperations = [];
   var foundProfileUserOperations = [];
@@ -62,10 +78,27 @@ function Balance() {
     } catch(error){
         console.error('Error parsing storedUserOperations:', error);
       };
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = (event) => {
+        setOpen(false);
+        event.stopPropagation();
+    };
+
+
+  const HandleBalanceCloseClick = (event) => {
+      if (foundProfileUserOperations.id){
+        HandleBalanceClose(foundProfileUserOperations.id);
+        setOpen(false);
+        navigate("/usersearch/")
+      }
+      event.stopPropagation();
+  }
 
   useEffect(() => {
 
-    const RefreshBalance = () =>{
+    const RefreshBalance = () => {
       if(refreshBalance){
         setrefreshBalance(false)
       } else {
@@ -152,36 +185,6 @@ function Balance() {
 
                       <MDBCol lg="12" style={{ overflowY: 'auto', maxHeight: '200px' }}>
                           {operationsBalance.length > 0 ? operationsBalance : "Usuário não possui lista ativa" }
-                          {/* <BalanceOccurrenceSmall 
-                          name="Material Reciclável"
-                          mesure="2"
-                          price="9"
-                          mesure_unity="KG"
-                        />
-                          <BalanceOccurrenceSmall 
-                          name="Material Reciclável"
-                          mesure="2"
-                          price="9"
-                          mesure_unity="KG"
-                        />
-                          <BalanceOccurrenceSmall 
-                          name="Material Reciclável"
-                          mesure="2"
-                          price="9"
-                          mesure_unity="KG"
-                        />
-                          <BalanceOccurrenceSmall 
-                          name="Material Reciclável"
-                          mesure="2"
-                          price="9"
-                          mesure_unity="KG"
-                        />
-                          <BalanceOccurrenceSmall 
-                          name="Material Reciclável"
-                          mesure="2"
-                          price="9"
-                          mesure_unity="KG"
-                        /> */}
                         <a href="#!" type="submit" className="text-white">
                           <MDBIcon fab icon="cc-mastercard fa-2x me-2" />
                         </a>
@@ -217,14 +220,40 @@ function Balance() {
                         <p className="mb-2">R$ {foundUserOperationsBalance.length > 0 ? foundUserOperationsBalance[0].final_value : 0}</p>
                       </div>
   
-                      <MDBBtn color="info" block size="lg">
+                      <MDBBtn color="info" block size="lg" onClick={handleOpen}>
                         <div className="d-flex justify-content-between">
-                          <span>$4818.00</span>
+                          <span>$ {foundUserOperationsBalance.length > 0 ? foundUserOperationsBalance[0].final_value : 0}</span>
                           <span>
                             Fechar {" "}
                             <i className="fas fa-long-arrow-alt-right ms-2"></i>
                           </span>
                         </div>
+                        <Modal
+                          open={open}
+                          onClose={handleClose}
+                          aria-labelledby="modal-modal-material"
+                          aria-describedby="modal-modal-description"
+                      >
+                          <Box sx={style}>
+                          <Typography variant="h4" component="h2" gutterBottom>
+                                      Fechamento de lista de usuário
+                          </Typography>
+                          <Typography variant="h4" component="h2" gutterBottom>
+                                      {foundProfileUserOperations && foundProfileUserOperations.id ? `Para usuário: ${foundProfileUserOperations.name}` : "Não há usuário selecionado"}
+                          </Typography>
+                          <Typography variant="body2" color="error" gutterBottom>
+                              Esta operação não poderá ser desfeita!
+                          </Typography>
+                          <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+                              <MDBBtn color="danger" size="sl" className="ms-11" onClick={(event) => handleClose(event)}>
+                                          Cancelar
+                              </MDBBtn>
+                              <MDBBtn color="success" size="sl" className="ms-11" onClick={(event) => HandleBalanceCloseClick(event)}>
+                                          Fechar
+                              </MDBBtn>
+                          </div>
+                          </Box>
+                      </Modal>
                       </MDBBtn>
                     </MDBCardBody>
                   </MDBCard>

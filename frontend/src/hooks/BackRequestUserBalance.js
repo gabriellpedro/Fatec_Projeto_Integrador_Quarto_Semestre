@@ -19,7 +19,7 @@ async function HandleUserBalance(setoperationsBalance) {
               const operationsBalance = foundUserOperationsBalance.recicle_balance_array.map((balanceOccurrence, key) => (
                 <BalanceOccurrenceSmall
                   key={key}
-                  name="Tests Worked"
+                  name={balanceOccurrence.name}
                   mesure={balanceOccurrence.mesure}
                   price={balanceOccurrence.price}
                   mesure_unity={balanceOccurrence.mesure_unity}/>
