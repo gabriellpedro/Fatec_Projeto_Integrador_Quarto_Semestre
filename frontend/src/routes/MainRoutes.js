@@ -14,7 +14,7 @@ const HomeLoad = Loadable(lazy(() => import('../pages/Home')));
 const BalanceLoad = Loadable(lazy(() => import('../pages/Balance')));
 const UserSearchLoad = Loadable(lazy(() => import('../pages/UserBalanceSearch')));
 const AboutUs = Loadable(lazy(() => import('../pages/AboutUs')));
-
+const DashboardLoad = Loadable(lazy(() => import('../pages/dashboard/index')));
 
 // sample page routing
 // const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -45,6 +45,10 @@ const MainRoutes = {
     {
       path: '',
       element: <HomeLoad />,
+    },
+    {
+      path: 'dashboard',
+      element: <DashboardLoad />
     },
     {
       path: 'getmaterials',
