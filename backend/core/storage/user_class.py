@@ -87,4 +87,10 @@ class UserStorage(object):
         if not self.user_id:
             raise ValueError('Need to pass a valid user id')
         user_occurrence = UserControl.objects.filter(user_id=self.user_id)
-        return self.__clean_user_occurrence(user_occurrence)
+        user_final_occurrence = self.__clean_user_occurrence(user_occurrence)
+        if user_final_occurrence:
+            if 'current_total' in user_final_occurrence.keys():
+                user_final_occurrence["current_total"] = float(f'{user_final_occurrence["current_total"]:.2f}')
+            if 'total_earned' in user_final_occurrence.keys():
+                user_final_occurrence["total_earned"] = float(f'{user_final_occurrence["total_earned"]:.2f}')
+        return user_final_occurrence
