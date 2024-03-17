@@ -19,10 +19,10 @@ class LoginPage extends StatelessWidget {
         color: Colors.white12,
         child: ListView(children: <Widget>[
           SizedBox(
-            width: 128,
-            height: 128,
+            width: 256,
+            height: 256,
             child: Image(
-              image: AssetImage('assets/images/facebook.png'),
+              image: AssetImage('assets/images/ecoponto_with_brand_out.png'),
             ),
           ),
           SizedBox(
