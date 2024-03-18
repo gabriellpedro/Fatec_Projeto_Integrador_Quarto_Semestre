@@ -142,7 +142,10 @@ class LoginPage extends StatelessWidget {
                   onPressed: () => {
                     if (_formKey.currentState!.validate())
                       {
-                        logar(_emailController.text, _senhaController.text),
+                        logar(
+                          _emailController.text,
+                          _senhaController.text,
+                        ),
                       },
                   },
                 ),
