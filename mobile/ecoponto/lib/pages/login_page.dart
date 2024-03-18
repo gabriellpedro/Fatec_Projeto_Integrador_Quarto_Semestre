@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -137,7 +140,10 @@ class LoginPage extends StatelessWidget {
                     ],
                   ),
                   onPressed: () => {
-                    if (_formKey.currentState!.validate()) {},
+                    if (_formKey.currentState!.validate())
+                      {
+                        logar(_emailController.text, _senhaController.text),
+                      },
                   },
                 ),
               ),
@@ -156,5 +162,26 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> logar(String email, String password) async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:8000/materials/login/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        <String, String>{
+          'email': email,
+          'password': password,
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      print('Login Successful');
+    } else {
+      print('Failed to login');
+    }
   }
 }
