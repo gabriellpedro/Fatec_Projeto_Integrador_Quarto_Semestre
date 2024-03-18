@@ -1,25 +1,22 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:convert';
+// ignore_for_file: prefer_const_constructors, duplicate_ignore
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class RegisterPage extends StatelessWidget {
+  RegisterPage({super.key});
 
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
+  final _senhaConfirmController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.only(
-          top: 60,
+          top: 50,
           left: 40,
           right: 40,
         ),
@@ -29,9 +26,9 @@ class LoginPage extends StatelessWidget {
           child: ListView(
             children: <Widget>[
               SizedBox(
-                width: 248,
-                height: 248,
-                child: Image(
+                width: 224,
+                height: 224,
+                child: const Image(
                   image:
                       AssetImage('assets/images/ecoponto_with_brand_out.png'),
                 ),
@@ -54,7 +51,7 @@ class LoginPage extends StatelessWidget {
                 style: TextStyle(fontSize: 20),
                 validator: (email) {
                   if (email == null || email.isEmpty) {
-                    return 'Digite seu e-mail';
+                    return 'Digite u e-mail';
                   }
                   return null;
                 },
@@ -67,7 +64,7 @@ class LoginPage extends StatelessWidget {
                 keyboardType: TextInputType.text,
                 obscureText: true,
                 decoration: InputDecoration(
-                  hintText: 'Digite sua senha',
+                  hintText: 'Digite uma senha',
                   labelText: 'Senha',
                   labelStyle: TextStyle(
                     color: Colors.black38,
@@ -78,27 +75,33 @@ class LoginPage extends StatelessWidget {
                 style: TextStyle(fontSize: 20),
                 validator: (senha) {
                   if (senha == null || senha.isEmpty) {
-                    return 'Digite sua senha';
+                    return 'Digite uma senha';
                   }
                   return null;
                 },
               ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 40,
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  // ignore: avoid_print
-                  onPressed: () {},
-                  style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(Colors.black38),
-                  ),
-                  child: Text(
-                    "Recuperar senha",
+              TextFormField(
+                controller: _senhaConfirmController,
+                keyboardType: TextInputType.text,
+                obscureText: true,
+                decoration: InputDecoration(
+                  hintText: 'Confirme sua senha',
+                  labelText: 'Confirme a senha',
+                  labelStyle: TextStyle(
+                    color: Colors.black38,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 20,
                   ),
                 ),
+                style: TextStyle(fontSize: 20),
+                validator: (senha) {
+                  if (senha == _senhaController.text ||
+                      senha == null ||
+                      senha.isEmpty) {
+                    return 'Digite as duas senhas iguais';
+                  }
+                  return null;
+                },
               ),
               SizedBox(
                 height: 40,
@@ -122,11 +125,12 @@ class LoginPage extends StatelessWidget {
                 ),
                 child: SizedBox.expand(
                   child: TextButton(
+                    onPressed: () {},
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const <Widget>[
                         Text(
-                          ' Login',
+                          ' Cadastrar-se',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black87,
@@ -141,24 +145,18 @@ class LoginPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    onPressed: () => {
-                      if (_formKey.currentState!.validate())
-                        {
-                          logar(
-                            _emailController.text,
-                            _senhaController.text,
-                          ),
-                        },
-                    },
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 5,
               ),
               SizedBox(
                 height: 40,
                 child: TextButton(
                   onPressed: () {},
                   child: Text(
-                    'Cadastre-se',
+                    'Já possuo conta',
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -168,25 +166,5 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> logar(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/materials/login/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(
-        <String, String>{
-          'email': email,
-          'password': password,
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      print('Login Successful');
-    } else {
-      print('Failed to login');
-    }
   }
 }
