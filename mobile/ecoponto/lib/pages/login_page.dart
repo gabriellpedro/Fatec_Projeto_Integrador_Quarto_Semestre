@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'register_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -156,7 +156,12 @@ class LoginPage extends StatelessWidget {
               SizedBox(
                 height: 40,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterPage()),
+                    );
+                  },
                   child: Text(
                     'Cadastre-se',
                     textAlign: TextAlign.center,
