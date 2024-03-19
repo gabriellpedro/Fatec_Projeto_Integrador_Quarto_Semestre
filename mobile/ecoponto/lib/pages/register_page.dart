@@ -3,11 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'login_page.dart';
+import 'dart:convert';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
 
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   final _senhaConfirmController = TextEditingController();
@@ -38,6 +40,26 @@ class RegisterPage extends StatelessWidget {
                 height: 4,
               ),
               TextFormField(
+                controller: _nameController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  hintText: 'EcoPonto',
+                  labelText: 'Nome',
+                  labelStyle: TextStyle(
+                    color: Colors.black38,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                  ),
+                ),
+                style: TextStyle(fontSize: 15),
+                validator: (email) {
+                  if (email == null || email.isEmpty) {
+                    return 'Digite um e-mail';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
@@ -46,19 +68,19 @@ class RegisterPage extends StatelessWidget {
                   labelStyle: TextStyle(
                     color: Colors.black38,
                     fontWeight: FontWeight.w400,
-                    fontSize: 20,
+                    fontSize: 15,
                   ),
                 ),
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 15),
                 validator: (email) {
                   if (email == null || email.isEmpty) {
-                    return 'Digite u e-mail';
+                    return 'Digite um e-mail';
                   }
                   return null;
                 },
               ),
               SizedBox(
-                height: 10,
+                height: 4,
               ),
               TextFormField(
                 controller: _senhaController,
@@ -70,10 +92,10 @@ class RegisterPage extends StatelessWidget {
                   labelStyle: TextStyle(
                     color: Colors.black38,
                     fontWeight: FontWeight.w400,
-                    fontSize: 20,
+                    fontSize: 15,
                   ),
                 ),
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 15),
                 validator: (senha) {
                   if (senha == null || senha.isEmpty) {
                     return 'Digite uma senha';
@@ -91,12 +113,12 @@ class RegisterPage extends StatelessWidget {
                   labelStyle: TextStyle(
                     color: Colors.black38,
                     fontWeight: FontWeight.w400,
-                    fontSize: 20,
+                    fontSize: 15,
                   ),
                 ),
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 15),
                 validator: (senha) {
-                  if (senha == _senhaController.text ||
+                  if (senha != _senhaController.text ||
                       senha == null ||
                       senha.isEmpty) {
                     return 'Digite as duas senhas iguais';
@@ -105,7 +127,7 @@ class RegisterPage extends StatelessWidget {
                 },
               ),
               SizedBox(
-                height: 40,
+                height: 50,
               ),
               Container(
                 height: 60,
@@ -126,7 +148,18 @@ class RegisterPage extends StatelessWidget {
                 ),
                 child: SizedBox.expand(
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () => {
+                      if (_formKey.currentState!.validate())
+                        {
+                          registrar(
+                              _nameController.text,
+                              _emailController.text,
+                              _senhaController.text,
+                              _senhaConfirmController.text),
+                        },
+                      print(_senhaConfirmController),
+                      print(_senhaController)
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const <Widget>[
@@ -150,7 +183,7 @@ class RegisterPage extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 4,
               ),
               SizedBox(
                 height: 40,
@@ -172,5 +205,28 @@ class RegisterPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> registrar(String name, String email, String password,
+      String confirmPassword) async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:8000/materials/register/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        <String, String>{
+          'name': name,
+          'email': email,
+          'password': password,
+          'confirm_password': confirmPassword
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      print('Criado com sucesso');
+    } else {
+      print('Falha ao criar usuario');
+    }
   }
 }

@@ -29,8 +29,8 @@ class LoginPage extends StatelessWidget {
           child: ListView(
             children: <Widget>[
               SizedBox(
-                width: 248,
-                height: 248,
+                width: 224,
+                height: 224,
                 child: Image(
                   image:
                       AssetImage('assets/images/ecoponto_with_brand_out.png'),
@@ -48,10 +48,10 @@ class LoginPage extends StatelessWidget {
                   labelStyle: TextStyle(
                     color: Colors.black38,
                     fontWeight: FontWeight.w400,
-                    fontSize: 20,
+                    fontSize: 15,
                   ),
                 ),
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 15),
                 validator: (email) {
                   if (email == null || email.isEmpty) {
                     return 'Digite seu e-mail';
@@ -60,7 +60,7 @@ class LoginPage extends StatelessWidget {
                 },
               ),
               SizedBox(
-                height: 10,
+                height: 4,
               ),
               TextFormField(
                 controller: _senhaController,
@@ -72,10 +72,10 @@ class LoginPage extends StatelessWidget {
                   labelStyle: TextStyle(
                     color: Colors.black38,
                     fontWeight: FontWeight.w400,
-                    fontSize: 20,
+                    fontSize: 15,
                   ),
                 ),
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 15),
                 validator: (senha) {
                   if (senha == null || senha.isEmpty) {
                     return 'Digite sua senha';
@@ -84,7 +84,7 @@ class LoginPage extends StatelessWidget {
                 },
               ),
               SizedBox(
-                height: 10,
+                height: 4,
               ),
               Container(
                 height: 40,
@@ -101,7 +101,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 40,
+                height: 60,
               ),
               Container(
                 height: 60,
