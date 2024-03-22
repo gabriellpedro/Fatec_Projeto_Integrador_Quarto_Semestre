@@ -69,7 +69,7 @@ A biblioteca Djongo realiza o manejamento do banco de dados NoSQL Mongo com o fr
 Biblioteca que encapsula a biblioteca request, e realiza o manejamento de erros como SSL, ConnectionError etc... E realiza diversas tentativas até que o output seja o desejado ou se as tentativas atinjam um número específico. Essa biblioteca também gera um objeto do tipo BeautifulSoup caso a resposta seja favorável.
 
 
-## Contrubuidores
+## Contribuidores
 
 <table>
   <tr>
