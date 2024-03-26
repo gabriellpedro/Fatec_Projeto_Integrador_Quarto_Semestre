@@ -33,12 +33,17 @@ class UserStorage(object):
             _ = self.user.pop('_state')
             return self.user
 
-    def get_by_email(self, email: str or None=None) -> dict or None:
+    def get_by_email(self, email: str or None=None, object_: bool=bool()) -> dict or None:
         if email:
             self.email = email
         if not self.email:
             raise ValueError('Need to pass a valid email')
         self.user_occurrence = User.objects.filter(email=self.email)
+        if object_:
+            if len(self.user_occurrence) > 0:
+                return self.user_occurrence[0]
+            else:
+                return
         return self.__clean_user_occurrence(self.user_occurrence)
 
     def get_by_token(self, token: str or None=None) -> dict or None:
