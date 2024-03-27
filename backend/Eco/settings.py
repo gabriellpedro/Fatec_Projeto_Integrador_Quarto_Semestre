@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -116,7 +117,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'ecoponto',
         'CLIENT': {
-                 'host': 'mongodb+srv://gabrielpedro47:bXBAm6DKhtIVdm99@ecoponto.trwzb0l.mongodb.net/?retryWrites=false&w=majority'
+                 'host': config('MONGO_DB')
         }
     }
 }
