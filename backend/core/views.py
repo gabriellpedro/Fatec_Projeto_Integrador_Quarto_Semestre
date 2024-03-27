@@ -207,7 +207,7 @@ class AuthLogoutView(APIView):
         return Response({"isLogged": False})
 
 
-class UserSearch(APIView):
+class UserOperations(APIView):
     """
     Class used to search by
     User using the storage
@@ -226,6 +226,28 @@ class UserSearch(APIView):
         else:
             return Response([{"errors": "Necessário enviar um email válido"}])
 
+    def put(self, request):
+        errors = {'errors': list()}
+        email = request.GET.get('email')
+        name = request.GET.get('name')
+        print(f'Yes, this is the email: {email}')
+        if email and name:
+            object_ = UserStorage(email)
+            possible_user = object_.get_by_email(email, object_=True)
+            if not possible_user:
+                return Response([{'errors': 'Usuário não encontrado'}])
+        else:
+            if not email:
+                errors['errors'].append('Necessário enviar um email válido')
+            if not name:
+                errors['errors'].append('Necessário enviar um nome válido')
+            return Response([errors])
+        if name == possible_user.name:
+            errors['errors'].append('Necessário enviar um nome diferente do atual')
+        else:
+            possible_user.name = name
+            possible_user.save()
+            return Response({'errors': list()}, status=status.HTTP_204_NO_CONTENT)
 
 class RecycleBalanceView(APIView):
     """
