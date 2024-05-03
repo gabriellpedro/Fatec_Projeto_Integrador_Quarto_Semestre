@@ -1,3 +1,4 @@
+import 'package:ecoponto/pages/home_page.dart';
 import 'package:ecoponto/pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ecoponto/pages/login_page.dart';
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(),
+      // home: LoginPage(),
+      home: HomePage(),
       //home: RegisterPage(),
     );
   }
