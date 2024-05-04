@@ -46,7 +46,7 @@ class HomePage extends StatelessWidget {
               buildCustomContainerButtom2(),
               SizedBox(height: 15),
               SizedBox(
-                height: 600,
+                height: 350,
                 width: double.infinity,
                 child: MapCardWidget(),
               ),

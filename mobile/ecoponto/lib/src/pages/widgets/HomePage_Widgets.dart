@@ -121,26 +121,22 @@ class MapCardWidget extends StatelessWidget {
         ),
         child: Container(
           width: 1000,
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
               Expanded(
                 child: Image(
-                  image: AssetImage('assets/images/img_home.png'),
-                  fit: BoxFit.cover,
+                  image: AssetImage('assets/images/leme_map.png'),
+                  // fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
                   backgroundColor: Color.fromARGB(255, 86, 140, 86),
                 ),
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => YourNewPage()),
-                  // );
                   Navigator.of(context).pushNamed('/map');
                 },
                 child: const Text('Ver pontos de coleta'),
