@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
                 child: InitialImageWidget(),
               ),
               SizedBox(
-                height: 7,
+                height: 0,
               ),
               buildCustomContainerButtom1(),
               SizedBox(
