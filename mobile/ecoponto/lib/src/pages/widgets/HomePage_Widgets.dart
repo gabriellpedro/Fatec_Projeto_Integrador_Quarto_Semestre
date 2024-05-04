@@ -1,7 +1,32 @@
 // ignore: file_names
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+
+class InitialImageWidget extends StatelessWidget {
+  const InitialImageWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 500,
+        padding: const EdgeInsets.all(0),
+        child: Column(
+          children: [
+            Expanded(
+              child: Image(
+                image: AssetImage('assets/images/img_home.PNG'),
+                // fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 // ignore: camel_case_types
 class buildCustomContainerButtom1 extends StatelessWidget {
