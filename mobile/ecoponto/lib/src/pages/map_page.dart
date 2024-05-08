@@ -2,22 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
-
 class MapPage extends StatefulWidget {
   @override
   _SimpleMapState createState() => _SimpleMapState();
 }
-
 
 class _SimpleMapState extends State<MapPage> {
   late LocationData locationUser;
   static late LatLng _kMapCenter;
 
   static final CameraPosition _kInitialPosition =
-  CameraPosition(target: _kMapCenter, zoom: 30.0, tilt: 0, bearing: 0);
+      CameraPosition(target: _kMapCenter, zoom: 30.0, tilt: 0, bearing: 0);
 
   Set<Marker> _createMarker() {
-
     return {
       Marker(
           markerId: MarkerId("marker_1"),
@@ -31,12 +28,14 @@ class _SimpleMapState extends State<MapPage> {
       ),
     };
   }
-  @override
-  void initState() {
-     Location().getLocation().then((value) => locationUser = value);
-     _kMapCenter = LatLng(locationUser.latitude ?? 0, locationUser.longitude ?? 0);
-    super.initState();
-  }
+
+  // @override
+  // void initState() {
+  //   Location().getLocation().then((value) => locationUser = value);
+  //   _kMapCenter =
+  //       LatLng(locationUser.latitude ?? 0, locationUser.longitude ?? 0);
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -44,17 +43,35 @@ class _SimpleMapState extends State<MapPage> {
       appBar: AppBar(
         title: Text('Exibição de mapa'),
       ),
-      body: GoogleMap(
-        initialCameraPosition: _kInitialPosition,
-        myLocationEnabled: true,
-        mapType: MapType.satellite,
-        markers: _createMarker(),
+      body: FutureBuilder(
+        future: getLocation(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return GoogleMap(
+              initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                    snapshot.data!.latitude!,
+                    snapshot.data!.longitude!,
+                  ),
+                  zoom: 30.0,
+                  tilt: 0,
+                  bearing: 0),
+              myLocationEnabled: true,
+              mapType: MapType.satellite,
+              // markers: _createMarker(),
+            );
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }
 
-  getLocation() async {
+  Future<LocationData> getLocation() async {
     final locationUser = Location();
-    var locationData = await locationUser.getLocation();
+    return await locationUser.getLocation();
   }
 }
