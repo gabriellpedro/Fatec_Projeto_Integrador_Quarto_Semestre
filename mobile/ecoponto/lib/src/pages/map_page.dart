@@ -1,77 +1,69 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 class MapPage extends StatefulWidget {
+  const MapPage({super.key});
+
   @override
-  _SimpleMapState createState() => _SimpleMapState();
+  State<MapPage> createState() => _MapPageState();
 }
 
-class _SimpleMapState extends State<MapPage> {
-  late LocationData locationUser;
-  static late LatLng _kMapCenter;
+class _MapPageState extends State<MapPage> {
+  late LatLng userPosition;
 
-  static final CameraPosition _kInitialPosition =
-      CameraPosition(target: _kMapCenter, zoom: 30.0, tilt: 0, bearing: 0);
+  Future<LatLng> getUserLocation() async {
+    Location location = Location();
+    LocationData userLocation;
 
-  Set<Marker> _createMarker() {
-    return {
-      Marker(
-          markerId: MarkerId("marker_1"),
-          position: _kMapCenter,
-          infoWindow: InfoWindow(title: 'Seu local'),
-          rotation: 0),
-      Marker(
-        markerId: MarkerId("marker_2"),
-        infoWindow: InfoWindow(title: 'posto de saúde'),
-        position: LatLng(-22.354534, -47.334139),
-      ),
-    };
+    PermissionStatus status = await location.requestPermission();
+    bool active = await location.serviceEnabled();
+
+    if (status == PermissionStatus.granted && active) {
+      userLocation = await location.getLocation();
+      userPosition = LatLng(userLocation.latitude!, userLocation.longitude!);
+      log('LocationData: $userLocation');
+    } else {
+      userPosition = const LatLng(-22.557483, -47.412402);
+    }
+
+    return userPosition;
   }
 
-  // @override
-  // void initState() {
-  //   Location().getLocation().then((value) => locationUser = value);
-  //   _kMapCenter =
-  //       LatLng(locationUser.latitude ?? 0, locationUser.longitude ?? 0);
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    // getuserLocation();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Exibição de mapa'),
+        title: const Text('POC Google Maps'),
       ),
       body: FutureBuilder(
-        future: getLocation(),
-        builder: (context, snapshot) {
+        future: getUserLocation(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData) {
             return GoogleMap(
               initialCameraPosition: CameraPosition(
-                  target: LatLng(
-                    snapshot.data!.latitude!,
-                    snapshot.data!.longitude!,
-                  ),
-                  zoom: 30.0,
-                  tilt: 0,
-                  bearing: 0),
-              myLocationEnabled: true,
-              mapType: MapType.satellite,
-              // markers: _createMarker(),
+                target: snapshot.data,
+                zoom: 15,
+              ),
             );
           }
-
           return const Center(
-            child: CircularProgressIndicator(),
+            child: SizedBox(
+              width: 150,
+              height: 150,
+              child: CircularProgressIndicator(),
+            ),
           );
         },
       ),
     );
-  }
-
-  Future<LocationData> getLocation() async {
-    final locationUser = Location();
-    return await locationUser.getLocation();
   }
 }
