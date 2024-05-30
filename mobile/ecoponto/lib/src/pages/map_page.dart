@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -24,7 +22,6 @@ class _MapPageState extends State<MapPage> {
     if (status == PermissionStatus.granted && active) {
       userLocation = await location.getLocation();
       userPosition = LatLng(userLocation.latitude!, userLocation.longitude!);
-      log('LocationData: $userLocation');
     } else {
       userPosition = const LatLng(-22.557483, -47.412402);
     }
@@ -33,16 +30,10 @@ class _MapPageState extends State<MapPage> {
   }
 
   @override
-  void initState() {
-    // getuserLocation();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('POC Google Maps'),
+        title: const Text('Pontos de coleta'),
       ),
       body: FutureBuilder(
         future: getUserLocation(),
@@ -53,6 +44,14 @@ class _MapPageState extends State<MapPage> {
                 target: snapshot.data,
                 zoom: 15,
               ),
+               markers: {
+                Marker(
+                  markerId: MarkerId('userPosition'),
+                  position: snapshot.data!,
+                  infoWindow: InfoWindow(title: 'Sua localização'),
+                ),
+              },
+              mapType: MapType.normal,
             );
           }
           return const Center(
