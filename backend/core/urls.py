@@ -15,7 +15,7 @@ urlpatterns = [
         RecicleMaterialsStatisticsViewByState.as_view(),
         name="cities_by_state",
     ),
-    path("user_search/", UserSearch.as_view(), name="user_search"),
+    path("user_search/", UserOperations.as_view(), name="user_search"),
     path("recycle_balance/", RecycleBalanceView.as_view(), name="recycle_balance"),
     path(
         "recycle_balance/add_occurrence",

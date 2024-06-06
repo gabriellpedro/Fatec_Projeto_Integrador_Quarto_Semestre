@@ -1,14 +1,11 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'register_page.dart';
+import 'home_page.dart'; // Import the HomePage widget
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+  LoginPage({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -32,8 +29,7 @@ class LoginPage extends StatelessWidget {
                 width: 224,
                 height: 224,
                 child: Image(
-                  image:
-                      AssetImage('assets/images/ecoponto_with_brand_out.png'),
+                  image: AssetImage('assets/images/ecoponto_with_brand_out.png'),
                 ),
               ),
               SizedBox(
@@ -90,7 +86,6 @@ class LoginPage extends StatelessWidget {
                 height: 40,
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  // ignore: avoid_print
                   onPressed: () {},
                   style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(Colors.black38),
@@ -141,15 +136,7 @@ class LoginPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    onPressed: () => {
-                      if (_formKey.currentState!.validate())
-                        {
-                          logar(
-                            _emailController.text,
-                            _senhaController.text,
-                          ),
-                        },
-                    },
+                    onPressed: () => _login(context), // Call the _login method
                   ),
                 ),
               ),
@@ -175,23 +162,37 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Future<void> logar(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/materials/login/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(
-        <String, String>{
-          'email': email,
-          'password': password,
+  void _login(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      final String email = _emailController.text;
+      final String password = _senhaController.text;
+
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/materials/login/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
         },
-      ),
-    );
-    if (response.statusCode == 200) {
-      print('Login Successful');
-    } else {
-      print('Failed to login');
+        body: jsonEncode(
+          <String, String>{
+            'email': email,
+            'password': password,
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        final String token = data['token'];
+
+        // Navigate to the HomePage and pass the token
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage(token: token)),
+        );
+      } else {
+        // Show error message or handle failed login
+        print('Failed to login');
+      }
     }
   }
 }

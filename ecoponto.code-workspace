@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "recicle_apis_consume"
+		},
+		{
+			"path": "node_modules"
+		},
+		{
+			"path": "mobile"
+		},
+		{
+			"path": "build"
+		},
+		{
+			"path": "backend"
+		},
+		{
+			"path": "frontend"
+		}
+	]
+}
