@@ -29,7 +29,7 @@
             />
             <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyBL1XSLbkmLLPR3UpEI3TvVOW8H0YvT2rU" /> <!-- Replace YOUR_API_KEY with your actual API key -->
+                android:value="" /> <!-- Replace YOUR_API_KEY with your actual API key -->
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
