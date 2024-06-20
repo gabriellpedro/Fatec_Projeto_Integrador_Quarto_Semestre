@@ -4,6 +4,7 @@ import 'package:flutter_ecommerce/controllers/itembag_controller.dart';
 import 'package:flutter_ecommerce/controllers/product_controller.dart';
 import 'package:flutter_ecommerce/providers/balance_provider.dart';
 import 'package:flutter_ecommerce/providers/material_api.dart';
+import 'package:flutter_ecommerce/views/user/profile_page.dart';
 import 'package:flutter_ecommerce/widgets/ads_banner_widget.dart';
 import 'package:flutter_ecommerce/widgets/card_widget.dart';
 import 'package:flutter_ecommerce/widgets/chip_widget.dart';
@@ -36,6 +37,11 @@ class HomePage extends ConsumerWidget {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const MapPage()),
+        );
+      } else if(index == 3){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => UserProfilePage()),
         );
       } else {
         ref.read(currentIndexProvider.notifier).state = index;
