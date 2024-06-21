@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from core.models import EcoPontoLocation
 
 class MaterialSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -10,7 +11,6 @@ class MaterialSerializer(serializers.Serializer):
     mesure_unity = serializers.CharField()
     is_active = serializers.BooleanField()
 
-
 class BalanceSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     date_balance = serializers.DateTimeField()
@@ -19,7 +19,6 @@ class BalanceSerializer(serializers.Serializer):
     is_active = serializers.BooleanField()
     material = MaterialSerializer()
 
-
 class UserOperationSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     created_at = serializers.DateTimeField()
@@ -27,3 +26,16 @@ class UserOperationSerializer(serializers.Serializer):
     total = serializers.FloatField()
     operation_type = serializers.IntegerField()
     balances = BalanceSerializer(many=True)
+
+class EcoPontoLocationSerializer(serializers.Serializer):
+    created_at = serializers.DateTimeField()
+    name = serializers.CharField()
+    material_list = serializers.CharField()
+    latitude = serializers.CharField()
+    longitude = serializers.CharField()
+    street = serializers.CharField()
+    place_number = serializers.IntegerField()
+    neighborhood = serializers.CharField()
+    city = serializers.CharField()
+    state = serializers.CharField()
+    cep = serializers.CharField()

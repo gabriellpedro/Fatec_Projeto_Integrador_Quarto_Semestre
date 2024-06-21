@@ -4,6 +4,7 @@ import 'package:flutter_ecommerce/controllers/itembag_controller.dart';
 import 'package:flutter_ecommerce/controllers/product_controller.dart';
 import 'package:flutter_ecommerce/providers/balance_provider.dart';
 import 'package:flutter_ecommerce/providers/material_api.dart';
+import 'package:flutter_ecommerce/views/user/ecopontos_page.dart';
 import 'package:flutter_ecommerce/views/user/profile_page.dart';
 import 'package:flutter_ecommerce/widgets/ads_banner_widget.dart';
 import 'package:flutter_ecommerce/widgets/card_widget.dart';
@@ -14,14 +15,13 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'cart_page.dart';
-import 'map_page.dart'; // Import the MapPage
+import 'map_page.dart';
 
 final currentIndexProvider = StateProvider<int>((ref) {
   return 0;
 });
 
 class HomePage extends ConsumerWidget {
-
   const HomePage({Key? key}) : super(key: key);
 
   @override
@@ -38,7 +38,7 @@ class HomePage extends ConsumerWidget {
           context,
           MaterialPageRoute(builder: (context) => const MapPage()),
         );
-      } else if(index == 3){
+      } else if (index == 3) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => UserProfilePage()),
@@ -79,7 +79,28 @@ class HomePage extends ConsumerWidget {
           )
         ],
       ),
-      drawer: const Drawer(),
+      drawer: Drawer(
+        child: SafeArea(
+          child: Column(
+            children: [
+              ListTile(
+                leading: Icon(Icons.radio_button_on_outlined),
+                title: Text('Locais de EcoPonto'),
+                subtitle: Text('Clique aqui para consultar os locais de Ecoponto'),
+                trailing: Icon(Icons.arrow_right_sharp),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EcoPontoLocation(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
       body: currentIndex == 0
           ? SingleChildScrollView(
               child: Padding(
@@ -111,58 +132,88 @@ class HomePage extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      width: double.infinity,
-                      height: 300,
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(4),
-                        itemCount: 4,
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) =>
-                            ProductCardWidget(productIndex: index),
-                      ),
-                    ),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Todos os Materiais', style: AppTheme.kHeadingOne),
-                        Text(
-                          'Ver todos',
-                          style: AppTheme.kSeeAllText,
-                        ),
-                      ],
-                    ),
                     materialsAsyncValue.when(
                       data: (materials) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           materialNotifier.setMaterials(materials);
                         });
-                        return MasonryGridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: materials.length,
-                          shrinkWrap: true,
-                          gridDelegate:
-                              const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                          ),
-                          itemBuilder: (context, index) => GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    DetailsPage(getIndex: index),
+                        if (materials.isEmpty) {
+                          return const Center(
+                            child: Text('No materials available'),
+                          );
+                        }
+                        return Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              width: double.infinity,
+                              height: 300,
+                              child: ListView.builder(
+                                padding: const EdgeInsets.all(4),
+                                itemCount: materials.length < 4 ? materials.length : 4,
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) =>
+                                    ProductCardWidget(productIndex: index),
                               ),
                             ),
-                            child: SizedBox(
-                              height: 250,
-                              child: ProductCardWidget(productIndex: index),
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Todos os Materiais', style: AppTheme.kHeadingOne),
+                                Text(
+                                  'Ver todos',
+                                  style: AppTheme.kSeeAllText,
+                                ),
+                              ],
                             ),
-                          ),
+                            MasonryGridView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: materials.length,
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                              ),
+                              itemBuilder: (context, index) => GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailsPage(getIndex: index),
+                                  ),
+                                ),
+                                child: SizedBox(
+                                  height: 250,
+                                  child: ProductCardWidget(productIndex: index),
+                                ),
+                              ),
+                            ),
+                          ],
                         );
                       },
-                      loading: () => const CircularProgressIndicator(),
+                      loading: () => Column(
+                        children: [
+                          const CircularProgressIndicator(),
+                          MasonryGridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: 4, // Display 4 loading placeholders
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                            ),
+                            itemBuilder: (context, index) => Container(
+                              height: 250,
+                              margin: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       error: (error, stackTrace) => Text('Error: $error'),
                     ),
                   ],

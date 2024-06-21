@@ -1,4 +1,4 @@
-from .serializers import UserOperationSerializer
+from .serializers import UserOperationSerializer, EcoPontoLocationSerializer
 from recicle_apis_consume.recicle_atlas.libs.recicle_atlas_class import RecicleAtlas
 from country_apis_consume.libs.states_information_class import StateInformation
 from core.storage.recycle_balance_class import RecycleBalanceStorage
@@ -10,7 +10,7 @@ from django.contrib.auth.models import auth
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from rest_framework import status
-from .models import RecycleBalance, MaterialsToRecycle
+from .models import EcoPontoLocation, RecycleBalance, MaterialsToRecycle
 from .models import OperationsBalance
 from core.forms import UserForm
 import plotly.express as px
@@ -452,3 +452,7 @@ class OperationsBalanceByUserView(ListAPIView):
                 balances.append(balance)
             operation["balances"] = balances
         return operations
+
+class EcoLocationList(ListAPIView):
+    queryset = EcoPontoLocation.objects.all()
+    serializer_class = EcoPontoLocationSerializer

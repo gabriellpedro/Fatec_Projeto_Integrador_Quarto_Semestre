@@ -32,6 +32,7 @@ urlpatterns = [
         OperationsBalanceByUserView.as_view(),
         name="recycle_balance_cancel",
     ),
+    path("ecopontos/", EcoLocationList.as_view(), name="ecopontos"),
     path("operation/", UserControlView.as_view(), name="operation_get"),
     path("register/", RegisterUser.as_view(), name="register"),
     path("staff/", UserStaffCheck.as_view(), name="staff"),

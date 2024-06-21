@@ -28,7 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '10.0.2.2',
-    '127.0.0.1'
+    'localhost',
+    '127.0.0.1',
+    '192.168.1.110'
 ]
 
 
@@ -121,6 +123,18 @@ DATABASES = {
         }
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'EcoPonto',  # Nome do seu banco de dados
+#         'ENFORCE_SCHEMA': False,  # Defina como True para forçar o esquema do Django
+#         'CLIENT': {
+#             'host': 'localhost',
+#             'port': 27017,
+#         }
+#     }
+# }
 
 
 # AUTHENTICATION_BACKENDS = (
