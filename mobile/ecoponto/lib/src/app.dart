@@ -22,7 +22,7 @@ class App extends StatelessWidget {
       routes: {
         '/': (context) => const HomePage(),
         '/login': (context) => LoginPage(),
-        '/map': (context) => const MapPage(),
+        '/map': (context) => MapPage(),
       },
     );
   }
