@@ -1,7 +1,31 @@
-// ignore: file_names
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+
+class InitialImageWidget extends StatelessWidget {
+  const InitialImageWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 500,
+        padding: const EdgeInsets.all(0),
+        child: Column(
+          children: [
+            Expanded(
+              child: Image(
+                image: AssetImage('assets/images/img_home.PNG'),
+                // fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 // ignore: camel_case_types
 class buildCustomContainerButtom1 extends StatelessWidget {
@@ -14,7 +38,7 @@ class buildCustomContainerButtom1 extends StatelessWidget {
       width: 700,
       alignment: Alignment.center,
       decoration: const BoxDecoration(
-        color: Color.fromARGB(50, 103, 80, 164),
+        color: Color.fromARGB(11, 103, 80, 164),
         borderRadius: BorderRadius.all(
           Radius.circular(28),
         ),
@@ -67,7 +91,7 @@ class buildCustomContainerButtom2 extends StatelessWidget {
       width: 700,
       alignment: Alignment.center,
       decoration: const BoxDecoration(
-        color: Color.fromARGB(50, 103, 80, 164),
+        color: Color.fromARGB(11, 103, 80, 164),
         borderRadius: BorderRadius.all(
           Radius.circular(28),
         ),
@@ -114,39 +138,37 @@ class MapCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Card(
-        elevation: 5.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: Container(
-          width: 1000,
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Expanded(
-                child: Image(
-                  image: AssetImage('assets/images/img_home.png'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Color.fromARGB(255, 86, 140, 86),
-                ),
-                onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => YourNewPage()),
-                  // );
-                  Navigator.of(context).pushNamed('/map');
-                },
-                child: const Text('Ver pontos de coleta'),
-              ),
-            ],
+      child: Container(
+        width: 1000,
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(11, 103, 80, 164),
+          borderRadius: BorderRadius.all(
+            Radius.circular(28),
           ),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Image(
+                image: AssetImage('assets/images/leme_map.png'),
+                // fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Color.fromARGB(255, 86, 140, 86),
+              ),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/map');
+              },
+              child: const Text('Ver pontos de coleta'),
+            ),
+          ],
         ),
       ),
     );

@@ -38,19 +38,30 @@ class HomePage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(25.0),
+          padding: const EdgeInsets.all(25),
           child: Column(
             children: [
-              buildCustomContainerButtom1(),
-              SizedBox(height: 15),
-              buildCustomContainerButtom2(),
-              SizedBox(height: 15),
               SizedBox(
-                height: 600,
+                height: 200,
+                width: double.infinity,
+                child: InitialImageWidget(),
+              ),
+              SizedBox(
+                height: 0,
+              ),
+              buildCustomContainerButtom1(),
+              SizedBox(
+                height: 15,
+              ),
+              buildCustomContainerButtom2(),
+              SizedBox(
+                height: 15,
+              ),
+              SizedBox(
+                height: 350,
                 width: double.infinity,
                 child: MapCardWidget(),
               ),
-              // BottomNavigationPage(),
             ],
           ),
         ),
