@@ -129,3 +129,24 @@ class UserControl(models.Model):
     current_total = models.FloatField()
     total_earned = models.FloatField()
     last_operation = models.DateTimeField()
+
+class EcoPontoLocation(models.Model):
+    """
+        Class used to manage 
+        the EcoPonto location
+    """
+
+    created_at = models.DateTimeField(auto_now_add = True)
+    name = models.CharField(max_length= 100)
+    material_list = models.CharField(max_length= 250)
+    latitude = models.CharField(max_length=10)
+    longitude = models.CharField(max_length=10)
+    street = models.CharField( max_length=100)
+    place_number = models.IntegerField()
+    neighborhood = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=2)
+    cep = models.CharField(max_length=9)
+
+    def __str__(self):
+        return self.name
