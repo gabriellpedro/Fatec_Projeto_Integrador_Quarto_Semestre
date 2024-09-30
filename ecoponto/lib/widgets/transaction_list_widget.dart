@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/model/transaction_model/transaction.dart';
-import 'package:flutter_ecommerce/providers/transaction_api.dart';
-import 'package:flutter_ecommerce/widgets/transactiontile.dart';
+import 'package:flutter_ecommerce/providers/transaction_list_api.dart';
+import 'package:flutter_ecommerce/widgets/transaction_tile_widget.dart';
 
 class TransactionList extends StatelessWidget {
   @override

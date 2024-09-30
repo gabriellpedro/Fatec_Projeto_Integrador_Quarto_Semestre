@@ -1,0 +1,22 @@
+class TransactionData {
+  final DateTime date;
+  final String material;
+  final double price;
+  final double quantity;
+
+  TransactionData({
+    required this.date,
+    required this.material,
+    required this.price,
+    required this.quantity,
+  });
+
+  factory TransactionData.fromJson(Map<String, dynamic> json) {
+    return TransactionData(
+      date: DateTime.parse(json['date_balance']),
+      material: json['material']['name'],
+      price: json['material']['price'].toDouble(),
+      quantity: json['mesure'].toDouble(),
+    );
+  }
+}
