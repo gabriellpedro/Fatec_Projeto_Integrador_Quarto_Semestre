@@ -37,19 +37,21 @@ class TransactionChart extends StatelessWidget {
   }
 
   List<BarChartGroupData> _buildBarGroups() {
-    const double barWidth = 20; // Largura da barra
-    const double spaceBetweenBars = 10; // Espaço entre as barras
-    return List.generate(transactions.length, (index) {
-      return BarChartGroupData(
-        x: index,
-        barRods: [
-          BarChartRodData(
-            toY: transactions[index].quantity, // Quantidade no eixo Y
-            width: barWidth,
-            color: Colors.blue, // Cor das barras
-          ),
-        ],
-      );
-    });
+    const double barWidth = 20;
+    return List.generate(
+      transactions.length,
+      (index) {
+        return BarChartGroupData(
+          x: index,
+          barRods: [
+            BarChartRodData(
+              toY: transactions[index].quantity,
+              width: barWidth,
+              color: Colors.blue,
+            ),
+          ],
+        );
+      },
+    );
   }
 }

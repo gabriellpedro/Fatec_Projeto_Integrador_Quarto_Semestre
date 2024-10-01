@@ -41,11 +41,9 @@ final priceCalcProvider = Provider<double>((ref) {
   double sum = 0;
 
   for (var element in materials) {
-    if (element.price != null) {
-      print(element.name);
-      sum += element.price;
+    print(element.name);
+    sum += element.price;
     }
-  }
 
   // print('teste + $sum');
   return sum;

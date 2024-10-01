@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/constants/themes.dart';
 import 'package:flutter_ecommerce/controllers/itembag_controller.dart';
 import 'package:flutter_ecommerce/controllers/product_controller.dart';
-import 'package:flutter_ecommerce/providers/balance_provider.dart';
 import 'package:flutter_ecommerce/providers/material_api.dart';
 import 'package:flutter_ecommerce/views/user/ecopontos_page.dart';
 import 'package:flutter_ecommerce/views/user/profile_page.dart';

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_result
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/constants/themes.dart';
 import 'package:flutter_ecommerce/controllers/itembag_controller.dart';

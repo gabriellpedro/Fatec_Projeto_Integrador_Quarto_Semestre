@@ -7,6 +7,7 @@ import 'package:gap/gap.dart';
 import '../constants/themes.dart';
 import '../controllers/product_controller.dart';
 
+// ignore: must_be_immutable
 class DetailsPage extends ConsumerWidget {
   DetailsPage({super.key, required this.getIndex});
 
@@ -23,9 +24,12 @@ class DetailsPage extends ConsumerWidget {
         title: const Text('Details Page'),
         actions: [
           Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: IconButton(
-                  onPressed: () {}, icon: const Icon(Icons.local_mall)))
+            padding: const EdgeInsets.only(right: 20),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.local_mall),
+            ),
+          )
         ],
       ),
       body: SingleChildScrollView(

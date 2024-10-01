@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_ecommerce/model/transaction_model_chart/transaction_data';
 import 'package:flutter_ecommerce/providers/transaction_chart_api.dart';
 import 'package:flutter_ecommerce/widgets/transaction_chart.dart';
