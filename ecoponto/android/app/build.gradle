@@ -6,6 +6,9 @@ plugins {
 apply from: 'C:/dev/flutter/packages/flutter_tools/gradle/flutter.gradle'
 
 android {
+
+
+    namespace 'com.example.flutter_ecommerce'
     compileSdkVersion 34
 
     kotlinOptions {
@@ -25,6 +28,7 @@ android {
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -36,10 +40,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {        
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
+        }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
 
 flutter {
